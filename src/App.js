@@ -1,21 +1,35 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
+
+    componentDidMount() {
+        // navigator.getUserMedia = navigator.getUserMedia ||
+        //                         navigator.webkitGetUserMedia ||
+        //                         navigator.mozGetUserMedia ||
+        //                         navigator.msGetUserMedia;
+
+        // if (navigator.mediaDevices.getUserMedia) {
+
+        navigator.mediaDevices.getUserMedia({audio: true, video: true}, function(stream) {
+            this.webcamInput = window.URL.createObjectURL(stream);
+        }, () => {
+            console.log("getUserMedia failed");
+        });
+
+        // } else {
+        //     video.src = 'somevideo.webm'; // fallback.
+        // }
+    }
+
+    render() {
+        return (
+            <div className="app">
+                <div className="header"></div>
+                <video className="video" ref={(element) => { this.webcamInput = element; }} autoPlay></video>
+            </div>
+        );
+    }
 }
 
 export default App;
