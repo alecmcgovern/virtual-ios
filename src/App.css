@@ -8,6 +8,27 @@
     background-color: rgba(0,0,0,0.5);
 }
 
+.text-input {
+
+}
+
+.text-input-submit {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: 1px solid black;
+    cursor: pointer;
+}
+
+.message {
+    width: 400px;
+    height: 400px;
+    border: 2px solid blue;
+}
+
 .video {
     width: 200px;
     height: 200px;

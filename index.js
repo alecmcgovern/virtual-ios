@@ -14,6 +14,15 @@ app.get('*', (req, res) => {
 	res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
+io.on('connection', function(client) {
+	console.log('client connected!');
+
+	client.on('sendMessage', (message) => {
+		console.log("client sent this message: " + message);
+		io.emit('messageReceived', message);
+	});
+});
+
 server.listen(PORT, () => {
 	console.log('video app is listening on port ' + PORT);
 });
