@@ -59,7 +59,7 @@ class App extends Component {
 				<div className="header"></div>
 				<input className="text-input" type="text" placeholder="placeholder" value={this.state.messageValue} onChange={this.handleChange} />
 				<div className="text-input-submit" onClick={this.handleSubmit}>Send</div>
-				<div className="message" value={this.state.string}></div>
+				<div className="message">{this.state.string}</div>
 				{/*<video className="video" ref={(element) => { this.webcamInput = element; }} autoPlay></video>*/}
 			</div>
 		);
