@@ -52,7 +52,7 @@ class App extends Component {
 	}
 
 	orientationChange(event) {
-		sendMessage("Z: "+ event.alpha + ", X: " + event.beta + ", Y: " + event.gamma);
+		sendMessage("Z: "+ event.alpha.toFixed(0) + ", X: " + event.beta.toFixed(0) + ", Y: " + event.gamma.toFixed(0));
 	}
 
 	handleChange(event) {
