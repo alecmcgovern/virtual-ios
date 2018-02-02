@@ -15,16 +15,21 @@ class App extends React.Component {
 
 		this.state = {
 			messageValue: '',
-			string: ''
+			string: '',
+			rotationDegrees: { 
+				x: 0, 
+				y: 0, 
+				z: 0 
+			}
 		}
 
-		this.handleChange = this.handleChange.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
+		// this.handleChange = this.handleChange.bind(this);
+		// this.handleSubmit = this.handleSubmit.bind(this);
 		this.orientationChange = this.orientationChange.bind(this);
 
 		subscribeToMessages((err, message) => {
 			this.setState({
-				string : message
+				string : "X: "+ message.x + ", Y: " + message.y + ", Z: " + message.z
 			});
 		});
 	}
@@ -39,20 +44,25 @@ class App extends React.Component {
 
 	orientationChange(event) {
 		if (event.alpha && event.beta && event.gamma) {
-			sendMessage("Z: "+ event.alpha.toFixed(0) + ", X: " + event.beta.toFixed(0) + ", Y: " + event.gamma.toFixed(0));
+			sendMessage({ 
+				x: event.beta.toFixed(0),
+				y: event.gamma.toFixed(0),
+				z: event.alpha.toFixed(0)
+			});
+			// sendMessage("Z: "+ event.alpha.toFixed(0) + ", X: " + event.beta.toFixed(0) + ", Y: " + event.gamma.toFixed(0));
 		}
 	}
 
-	handleChange(event) {
-		this.setState({messageValue: event.target.value});
-	}
+	// handleChange(event) {
+	// 	this.setState({messageValue: event.target.value});
+	// }
 
-	handleSubmit(event) {
-		event.preventDefault();
+	// handleSubmit(event) {
+	// 	event.preventDefault();
 
-		sendMessage(this.state.messageValue);
-		this.setState({messageValue: ""});
-	}
+	// 	sendMessage(this.state.messageValue);
+	// 	this.setState({messageValue: ""});
+	// }
 
 	onAnimate() {
 
@@ -76,9 +86,9 @@ class App extends React.Component {
 		let heightSegments = 10;
 		let depthSegments = 2;
 
-		const yRadians = this.degreeToRadian(0);
-		const zRadians = this.degreeToRadian(0);
-		const xRadians = this.degreeToRadian(0);
+		const xRadians = this.degreeToRadian(this.state.rotationDegrees.x);
+		const yRadians = this.degreeToRadian(this.state.rotationDegrees.y);
+		const zRadians = this.degreeToRadian(this.state.rotationDegrees.z);
 
 		rotation = new THREE.Euler(xRadians, yRadians, zRadians);
 
