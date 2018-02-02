@@ -1,12 +1,17 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { sendMessage, subscribeToMessages } from './api';
+
+import React3 from 'react-three-renderer';
+import * as THREE from 'three';
 
 import './App.css';
 
-class App extends Component {
+class App extends React.Component {
 
 	constructor(props) {
 		super(props);
+
+		this.cameraPosition = new THREE.Vector3(0,0,200);
 
 		this.state = {
 			messageValue: '',
@@ -25,34 +30,17 @@ class App extends Component {
 	}
 
 	componentDidMount() {
-		// navigator.getUserMedia = navigator.getUserMedia ||
-		//                         navigator.webkitGetUserMedia ||
-		//                         navigator.mozGetUserMedia ||
-		//                         navigator.msGetUserMedia;
-
-		// if (navigator.mediaDevices.getUserMedia) {
-
-		// navigator.mediaDevices.getUserMedia({audio: true, video: true}, function(stream) {
-		//     this.webcamInput = window.URL.createObjectURL(stream);
-		// }, () => {
-		//     console.log("getUserMedia failed");
-		// });
-
-		// } else {
-		//     video.src = 'somevideo.webm'; // fallback.
-		// }
-
 		window.addEventListener("deviceorientation", this.orientationChange);
-		// window.addEventListener("click", this.orientationChange);
 	}
 
 	componentWillUnmount() {
 		window.removeEventListener("deviceorientation", this.orientationChange);
-		// window.removeEventListener("click", this.orientationChange);
 	}
 
 	orientationChange(event) {
-		sendMessage("Z: "+ event.alpha.toFixed(0) + ", X: " + event.beta.toFixed(0) + ", Y: " + event.gamma.toFixed(0));
+		if (event.alpha && event.beta && event.gamma) {
+			sendMessage("Z: "+ event.alpha.toFixed(0) + ", X: " + event.beta.toFixed(0) + ", Y: " + event.gamma.toFixed(0));
+		}
 	}
 
 	handleChange(event) {
@@ -66,13 +54,54 @@ class App extends Component {
 		this.setState({messageValue: ""});
 	}
 
+	onAnimate() {
+
+	}
+
+	degreeToRadian(degree) {
+		return degree*(Math.PI/180);
+	}
+
 	render() {
+		let rotation;
+		let divisions = 36;
+		let wireframe = true;
+		let size = 400;
+
+		let width = 100;
+		let height = 100;
+		let depth = 10;
+
+		let widthSegments = 10;
+		let heightSegments = 10;
+		let depthSegments = 2;
+
+		const yRadians = this.degreeToRadian(0);
+		const zRadians = this.degreeToRadian(0);
+		const xRadians = this.degreeToRadian(0);
+
+		rotation = new THREE.Euler(xRadians, yRadians, zRadians);
+
 		return (
 			<div className="app">
 				<div className="header"></div>
-				<input className="text-input" type="text" placeholder="placeholder" value={this.state.messageValue} onChange={this.handleChange} />
-				<div className="text-input-submit" onClick={this.handleSubmit}>Send</div>
+				{/*<input className="text-input" type="text" placeholder="placeholder" value={this.state.messageValue} onChange={this.handleChange} />
+				<div className="text-input-submit" onClick={this.handleSubmit}>Send</div>*/}
 				<div className="message">{this.state.string}</div>
+				<React3 key={1} mainCamera="camera" width={size} height={size} alpha={true} onAnimate={() => this.onAnimate()}>
+					<scene>
+						<perspectiveCamera name="camera" fov={50} aspect={1} near={0.1} far={1000} position={this.cameraPosition} />
+						<mesh rotation={rotation}>
+							{/*<sphereGeometry radius={2.1} 
+											widthSegments={divisions} 
+											heightSegments={divisions} />*/}
+							<boxGeometry width={width} height={height} depth={depth}
+								widthSegments={widthSegments} heightSegments={heightSegments} depthSegments={depthSegments} />
+							<meshBasicMaterial wireframe={wireframe}>
+							</meshBasicMaterial>
+						</mesh>
+					</scene>
+				</React3>
 				{/*<video className="video" ref={(element) => { this.webcamInput = element; }} autoPlay></video>*/}
 			</div>
 		);
