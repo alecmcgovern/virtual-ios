@@ -11,7 +11,8 @@ class App extends React.Component {
 	constructor(props) {
 		super(props);
 
-		this.cameraPosition = new THREE.Vector3(0,0,200);
+		this.cameraPosition = new THREE.Vector3(0,-160,160);
+		this.cameraRotation = new THREE.Euler(this.degreeToRadian(40),this.degreeToRadian(0),this.degreeToRadian(0));
 
 		this.state = {
 			messageValue: '',
@@ -69,7 +70,7 @@ class App extends React.Component {
 
 		// Box sizing, segments
 		let wireframe = true;
-		let width = 100;
+		let width = 60;
 		let height = 100;
 		let depth = 10;
 
@@ -91,7 +92,7 @@ class App extends React.Component {
 				<div className="message">{this.state.string}</div>
 				<React3 key={1} mainCamera="camera" width={size} height={size} alpha={true} onAnimate={() => this.onAnimate()}>
 					<scene>
-						<perspectiveCamera name="camera" fov={50} aspect={1} near={0.1} far={1000} position={this.cameraPosition} />
+						<perspectiveCamera name="camera" fov={50} aspect={1} near={0.1} far={1000} position={this.cameraPosition} rotation={this.cameraRotation}/>
 						<mesh rotation={rotation}>
 							<boxGeometry width={width} height={height} depth={depth}
 								widthSegments={widthSegments} heightSegments={heightSegments} depthSegments={depthSegments} />
