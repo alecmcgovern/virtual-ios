@@ -42,7 +42,7 @@ class App extends Component {
 		// }
 
 		window.addEventListener("orientationchange", function() {
-		    console.log(window.screen.orientation.angle);
+		    sendMessage(window.screen.orientation.angle);
 		});
 	}
 
