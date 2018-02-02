@@ -30,7 +30,7 @@ class App extends React.Component {
 				string : "X: "+ message.x + ", Y: " + message.y + ", Z: " + message.z,
 				rotationDegrees : {
 					x : 0,
-					y : 0,
+					y : message.y,
 					z : message.z
 				}
 			});
