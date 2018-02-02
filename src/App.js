@@ -28,7 +28,7 @@ class App extends React.Component {
 		subscribeToMessages((err, message) => {
 			this.setState({
 				string : "X: "+ message.x + ", Y: " + message.y + ", Z: " + message.z,
-				rotation : {
+				rotationDegrees : {
 					x : 0,
 					y : 0,
 					z : message.z
