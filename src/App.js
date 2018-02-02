@@ -29,7 +29,7 @@ class App extends React.Component {
 			this.setState({
 				string : "X: "+ message.x + ", Y: " + message.y + ", Z: " + message.z,
 				rotationDegrees : {
-					x : 0,
+					x : message.x,
 					y : message.y,
 					z : message.z
 				}
