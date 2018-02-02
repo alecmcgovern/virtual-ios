@@ -23,13 +23,16 @@ class App extends React.Component {
 			}
 		}
 
-		// this.handleChange = this.handleChange.bind(this);
-		// this.handleSubmit = this.handleSubmit.bind(this);
 		this.orientationChange = this.orientationChange.bind(this);
 
 		subscribeToMessages((err, message) => {
 			this.setState({
-				string : "X: "+ message.x + ", Y: " + message.y + ", Z: " + message.z
+				string : "X: "+ message.x + ", Y: " + message.y + ", Z: " + message.z,
+				rotation : {
+					x : 0,
+					y : 0,
+					z : message.z
+				}
 			});
 		});
 	}
@@ -49,20 +52,8 @@ class App extends React.Component {
 				y: event.gamma.toFixed(0),
 				z: event.alpha.toFixed(0)
 			});
-			// sendMessage("Z: "+ event.alpha.toFixed(0) + ", X: " + event.beta.toFixed(0) + ", Y: " + event.gamma.toFixed(0));
 		}
 	}
-
-	// handleChange(event) {
-	// 	this.setState({messageValue: event.target.value});
-	// }
-
-	// handleSubmit(event) {
-	// 	event.preventDefault();
-
-	// 	sendMessage(this.state.messageValue);
-	// 	this.setState({messageValue: ""});
-	// }
 
 	onAnimate() {
 
@@ -73,11 +64,11 @@ class App extends React.Component {
 	}
 
 	render() {
-		let rotation;
-		let divisions = 36;
-		let wireframe = true;
+		// Canvas size
 		let size = 400;
 
+		// Box sizing, segments
+		let wireframe = true;
 		let width = 100;
 		let height = 100;
 		let depth = 10;
@@ -86,25 +77,22 @@ class App extends React.Component {
 		let heightSegments = 10;
 		let depthSegments = 2;
 
+		// Box Rotation
 		const xRadians = this.degreeToRadian(this.state.rotationDegrees.x);
 		const yRadians = this.degreeToRadian(this.state.rotationDegrees.y);
 		const zRadians = this.degreeToRadian(this.state.rotationDegrees.z);
 
+		let rotation;
 		rotation = new THREE.Euler(xRadians, yRadians, zRadians);
 
 		return (
 			<div className="app">
 				<div className="header"></div>
-				{/*<input className="text-input" type="text" placeholder="placeholder" value={this.state.messageValue} onChange={this.handleChange} />
-				<div className="text-input-submit" onClick={this.handleSubmit}>Send</div>*/}
 				<div className="message">{this.state.string}</div>
 				<React3 key={1} mainCamera="camera" width={size} height={size} alpha={true} onAnimate={() => this.onAnimate()}>
 					<scene>
 						<perspectiveCamera name="camera" fov={50} aspect={1} near={0.1} far={1000} position={this.cameraPosition} />
 						<mesh rotation={rotation}>
-							{/*<sphereGeometry radius={2.1} 
-											widthSegments={divisions} 
-											heightSegments={divisions} />*/}
 							<boxGeometry width={width} height={height} depth={depth}
 								widthSegments={widthSegments} heightSegments={heightSegments} depthSegments={depthSegments} />
 							<meshBasicMaterial wireframe={wireframe}>
@@ -112,7 +100,6 @@ class App extends React.Component {
 						</mesh>
 					</scene>
 				</React3>
-				{/*<video className="video" ref={(element) => { this.webcamInput = element; }} autoPlay></video>*/}
 			</div>
 		);
 	}
