@@ -15,6 +15,7 @@ class App extends Component {
 
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
+		this.orientationChange = this.orientationChange.bind(this);
 
 		subscribeToMessages((err, message) => {
 			this.setState({
@@ -41,9 +42,17 @@ class App extends Component {
 		//     video.src = 'somevideo.webm'; // fallback.
 		// }
 
-		window.addEventListener("orientationchange", function() {
-		    sendMessage(window.screen.orientation.angle);
-		});
+		window.addEventListener("deviceorientation", this.orientationChange);
+		// window.addEventListener("click", this.orientationChange);
+	}
+
+	componentWillUnmount() {
+		window.removeEventListener("deviceorientation", this.orientationChange);
+		// window.removeEventListener("click", this.orientationChange);
+	}
+
+	orientationChange(event) {
+		sendMessage("Z: "+ event.alpha + ", X: " + event.beta + ", Y: " + event.gamma);
 	}
 
 	handleChange(event) {
