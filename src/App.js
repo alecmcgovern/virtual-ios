@@ -40,6 +40,10 @@ class App extends Component {
 		// } else {
 		//     video.src = 'somevideo.webm'; // fallback.
 		// }
+
+		window.addEventListener("orientationchange", function() {
+		    console.log(window.screen.orientation.angle);
+		});
 	}
 
 	handleChange(event) {
