@@ -72,11 +72,11 @@ class App extends React.Component {
 		let wireframe = true;
 		let width = 60;
 		let height = 100;
-		let depth = 10;
+		let depth = 5;
 
-		let widthSegments = 10;
-		let heightSegments = 10;
-		let depthSegments = 2;
+		let widthSegments = 3;
+		let heightSegments = 5;
+		let depthSegments = 0;
 
 		// Box Rotation
 		const xRadians = this.degreeToRadian(this.state.rotationDegrees.x);

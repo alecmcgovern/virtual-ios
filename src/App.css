@@ -11,25 +11,13 @@
     background-color: rgba(0,0,0,0.5);
 }
 
-.text-input {
-
-}
-
-.text-input-submit {
-    width: 100px;
-    height: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    border: 1px solid black;
-    cursor: pointer;
-}
-
 .message {
     width: 400px;
     height: 50px;
-    border: 2px solid green;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 canvas {
