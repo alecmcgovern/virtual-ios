@@ -36,6 +36,11 @@ class App extends React.Component {
 				}
 			});
 		});
+
+		const d = 20;
+
+		this.lightPosition = new THREE.Vector3(d, d, d);
+		this.lightTarget = new THREE.Vector3(0, 0, 0);
 	}
 
 	componentDidMount() {
@@ -65,11 +70,13 @@ class App extends React.Component {
 	}
 
 	render() {
+		const d = 20;
+
 		// Canvas size
 		let size = 400;
 
 		// Box sizing, segments
-		let wireframe = true;
+		let wireframe = false;
 		let width = 60;
 		let height = 100;
 		let depth = 5;
@@ -77,6 +84,8 @@ class App extends React.Component {
 		let widthSegments = 3;
 		let heightSegments = 5;
 		let depthSegments = 0;
+
+		let color = new THREE.Color(0x004be6);
 
 		// Box Rotation
 		const xRadians = this.degreeToRadian(this.state.rotationDegrees.x);
@@ -90,15 +99,34 @@ class App extends React.Component {
 			<div className="app">
 				<div className="header"></div>
 				<div className="message">{this.state.string}</div>
-				<React3 key={1} mainCamera="camera" width={size} height={size} alpha={true} onAnimate={() => this.onAnimate()}>
+				<React3 key={1} antialias={true} mainCamera="camera" width={size} height={size} alpha={true} onAnimate={() => this.onAnimate()}>
 					<scene>
 						<perspectiveCamera name="camera" fov={50} aspect={1} near={0.1} far={1000} position={this.cameraPosition} rotation={this.cameraRotation}/>
 						<mesh rotation={rotation}>
 							<boxGeometry width={width} height={height} depth={depth}
 								widthSegments={widthSegments} heightSegments={heightSegments} depthSegments={depthSegments} />
-							<meshBasicMaterial wireframe={wireframe}>
-							</meshBasicMaterial>
+							<meshLambertMaterial wireframe={wireframe} color={color}>
+							</meshLambertMaterial>
 						</mesh>
+						<object3D>
+							<ambientLight/>
+						</object3D>
+						<directionalLight
+							color={0xffffff}
+							intensity={1.75}
+							castShadow
+							shadowMapWidth={1024}
+							shadowMapHeight={1024}
+							shadowCameraLeft={-d}
+							shadowCameraRight={d}
+							shadowCameraTop={d}
+							shadowCameraBottom={-d}
+
+							shadowCameraFar={3 * d}
+							shadowCameraNear={d}
+
+							position={this.lightPosition}
+							lookAt={this.lightTarget} />
 					</scene>
 				</React3>
 			</div>
