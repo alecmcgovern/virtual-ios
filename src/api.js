@@ -20,7 +20,7 @@ function subscribeToOrientation(callback) {
 }
 
 function sendOrientation(orientation) {
-	socket.emit('sendOrientation', sendOrientation);
+	socket.emit('sendOrientation', orientation);
 }
 
 export { subscribeToActiveClientList, subscribeToClientConnection, subscribeToClientDisconnection, subscribeToOrientation, sendOrientation };
