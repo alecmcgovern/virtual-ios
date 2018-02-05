@@ -4,6 +4,7 @@ import {
 	subscribeToActiveClientList, 
 	subscribeToClientConnection, 
 	subscribeToClientDisconnection, 
+	subscribeToControllingUserResponse,
 
 	subscribeToOrientation, 
 	sendOrientation 
@@ -13,6 +14,7 @@ import React3 from 'react-three-renderer';
 import * as THREE from 'three';
 
 import Welcome from './welcome.js';
+import Controller from './controller.js';
 
 import phoneScreen from './images/phoneScreen.png';
 
@@ -30,7 +32,8 @@ class App extends React.Component {
 				y: 0, 
 				z: 0 
 			},
-			activeClientList: {}
+			activeClientList: {},
+			inControl: false
 		}
 
 		this.orientationChange = this.orientationChange.bind(this);
@@ -57,6 +60,20 @@ class App extends React.Component {
 			})
 		});
 
+		subscribeToControllingUserResponse((err, response) => {
+			if (response) {
+				this.setState({
+					inControl: true
+				});
+				console.log("you are the controlling user");
+			} else {
+				this.setState({
+					inControl: false
+				});
+				console.log("you are not the controlling user");
+			}
+		});
+
 		subscribeToOrientation((err, orientation) => {
 			this.setState({
 				string : "X: "+ orientation.x + ", Y: " + orientation.y + ", Z: " + orientation.z,
@@ -68,12 +85,10 @@ class App extends React.Component {
 			});
 		});
 
-		const d = 20;
-
 		this.cameraPosition = new THREE.Vector3(0,30,160);
 		this.cameraRotation = new THREE.Euler(this.degreeToRadian(0),this.degreeToRadian(0),this.degreeToRadian(0));
 
-		this.lightPosition = new THREE.Vector3(d, d, 0);
+		this.lightPosition = new THREE.Vector3(20, 20, 0);
 		this.lightTarget = new THREE.Vector3(0, 0, 0);
 	}
 
@@ -105,6 +120,12 @@ class App extends React.Component {
 		// BOTTOM - PURPLE
 		this.refs.phone.faces[ 10 ].color.setHex( 0x860079 );
 		this.refs.phone.faces[ 11 ].color.setHex( 0x860079 );
+
+
+		// TESTING PURPOSES ONLY
+		// this.setState({
+		// 	inControl: true
+		// })
 	}
 
 	componentWillUnmount() {
@@ -161,39 +182,47 @@ class App extends React.Component {
 		return (
 			<div className="app">
 				<Welcome visible={welcomeVisible} />
-				<div className="main-canvas">
-					<div className="orientation">{this.state.string}</div>
-					<React3 key={1} antialias={true} mainCamera="camera" width={size} height={size} alpha={true} onAnimate={() => this.onAnimate()}>
-						<scene>
-							<perspectiveCamera name="camera" fov={50} aspect={1} near={0.1} far={1000} position={this.cameraPosition} rotation={this.cameraRotation}/>
-							<mesh rotation={rotation}>
-								<boxGeometry ref="phone" width={width} height={height} depth={depth}
-									widthSegments={widthSegments} heightSegments={heightSegments} depthSegments={depthSegments} />
-								<meshLambertMaterial wireframe={wireframe} color={color} vertexColors={THREE.VertexColors}>
-								</meshLambertMaterial>
-							</mesh>
-							<object3D>
-								<ambientLight/>
-							</object3D>
-							<directionalLight
-								color={0xffffff}
-								intensity={1.75}
-								castShadow
-								shadowMapWidth={1024}
-								shadowMapHeight={1024}
-								shadowCameraLeft={-d}
-								shadowCameraRight={d}
-								shadowCameraTop={d}
-								shadowCameraBottom={-d}
 
-								shadowCameraFar={3 * d}
-								shadowCameraNear={d}
+				{ !this.state.inControl ? 
+					<div className="main-canvas">
+						<div className="orientation">{this.state.string}</div>
+						<React3 key={1} antialias={true} mainCamera="camera" width={size} height={size} alpha={true} onAnimate={() => this.onAnimate()}>
+							<scene>
+								<perspectiveCamera name="camera" fov={50} aspect={1} near={0.1} far={1000} position={this.cameraPosition} rotation={this.cameraRotation}/>
+								<mesh rotation={rotation}>
+									<boxGeometry ref="phone" width={width} height={height} depth={depth}
+										widthSegments={widthSegments} heightSegments={heightSegments} depthSegments={depthSegments} />
+									<meshLambertMaterial wireframe={wireframe} color={color} vertexColors={THREE.VertexColors}>
+									</meshLambertMaterial>
+								</mesh>
+								<object3D>
+									<ambientLight/>
+								</object3D>
+								<directionalLight
+									color={0xffffff}
+									intensity={1.75}
+									castShadow
+									shadowMapWidth={1024}
+									shadowMapHeight={1024}
+									shadowCameraLeft={-d}
+									shadowCameraRight={d}
+									shadowCameraTop={d}
+									shadowCameraBottom={-d}
 
-								position={this.lightPosition}
-								lookAt={this.lightTarget} />
-						</scene>
-					</React3>
-				</div>
+									shadowCameraFar={3 * d}
+									shadowCameraNear={d}
+
+									position={this.lightPosition}
+									lookAt={this.lightTarget} />
+							</scene>
+						</React3>
+					</div>
+
+					:
+
+					<Controller rotation={this.state.rotationDegrees} />
+				}
+
 			</div>
 		);
 	}

@@ -53,6 +53,10 @@ io.on('connection', function(client) {
 
 			activeClients.controller = controllingUserId;
 			io.emit('activeClientList', activeClients);
+
+			client.emit('controllingUserResponse', true);
+		} else {
+			client.emit('controllingUserResponse', false);
 		}
 	});
 

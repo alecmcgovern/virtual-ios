@@ -21,6 +21,10 @@ function sendDeviceType(deviceType) {
 	socket.emit('sendDeviceType', deviceType);
 }
 
+function subscribeToControllingUserResponse(callback) {
+	socket.on('controllingUserResponse', controllingUserResponse => callback(null, controllingUserResponse));
+}
+
 
 // ORIENTATION CONTROLS
 function subscribeToOrientation(callback) {
@@ -36,7 +40,8 @@ export {
 	sendDeviceType, 
 	subscribeToActiveClientList, 
 	subscribeToClientConnection, 
-	subscribeToClientDisconnection, 
+	subscribeToClientDisconnection,
+	subscribeToControllingUserResponse,
 
 	subscribeToOrientation, 
 	sendOrientation 
