@@ -15,15 +15,11 @@ app.get('*', (req, res) => {
 });
 
 io.on('connection', function(client) {
+	// CONNECT / DISCONNECT
 	console.log(client.id + " connected");
 	io.emit('clientConnected', client.id);
 	io.clients((err, clients) => {
 		io.emit('activeClientList', clients);
-	});
-
-	client.on('sendMessage', (message) => {
-		console.log("client sent this message: " + message);
-		io.emit('messageReceived', message);
 	});
 
 	client.on('disconnect', (reason) => {
@@ -34,9 +30,12 @@ io.on('connection', function(client) {
 		});
 	})
 
-	// setTimeout(() => {
-	// 	client.disconnect(true);
-	// }, 5000);
+	// send device orientation
+	client.on('sendOrientation', (orientation) => {
+		console.log("client sent this orientation: " + orientation);
+		io.emit('orientationReceived', orientation);
+	});
+
 });
 
 server.listen(PORT, () => {

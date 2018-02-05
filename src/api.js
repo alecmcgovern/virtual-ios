@@ -15,12 +15,12 @@ function subscribeToActiveClientList(callback) {
 	socket.on('activeClientList', activeClientList => callback(null, activeClientList));
 }
 
-function subscribeToMessages(callback) {
-	socket.on('messageReceived', messageReceived => callback(null, messageReceived));
+function subscribeToOrientation(callback) {
+	socket.on('orientationReceived', orientationReceived => callback(null, orientationReceived));
 }
 
-function sendMessage(message) {
-	socket.emit('sendMessage', message);
+function sendOrientation(orientation) {
+	socket.emit('sendOrientation', sendOrientation);
 }
 
-export { subscribeToActiveClientList, subscribeToClientConnection, subscribeToClientDisconnection, subscribeToMessages, sendMessage };
+export { subscribeToActiveClientList, subscribeToClientConnection, subscribeToClientDisconnection, subscribeToOrientation, sendOrientation };

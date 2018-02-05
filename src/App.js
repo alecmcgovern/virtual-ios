@@ -1,5 +1,5 @@
 import React from 'react';
-import { subscribeToActiveClientList, subscribeToClientConnection, subscribeToClientDisconnection, sendMessage, subscribeToMessages } from './api';
+import { subscribeToActiveClientList, subscribeToClientConnection, subscribeToClientDisconnection, sendOrientation, subscribeToOrientation } from './api';
 
 import React3 from 'react-three-renderer';
 import * as THREE from 'three';
@@ -38,7 +38,7 @@ class App extends React.Component {
 			console.log("============");
 		});
 
-		subscribeToMessages((err, message) => {
+		subscribeToOrientation((err, message) => {
 			this.setState({
 				string : "X: "+ message.x + ", Y: " + message.y + ", Z: " + message.z,
 				rotationDegrees : {
@@ -68,7 +68,7 @@ class App extends React.Component {
 
 	orientationChange(event) {
 		if (event.alpha && event.beta && event.gamma) {
-			sendMessage({ 
+			sendOrientation({ 
 				x: event.beta.toFixed(0),
 				y: event.gamma.toFixed(0),
 				z: event.alpha.toFixed(0)
@@ -113,7 +113,7 @@ class App extends React.Component {
 		return (
 			<div className="app">
 				<div className="header"></div>
-				<div className="message">{this.state.string}</div>
+				<div className="orientation">{this.state.string}</div>
 				<React3 key={1} antialias={true} mainCamera="camera" width={size} height={size} alpha={true} onAnimate={() => this.onAnimate()}>
 					<scene>
 						<perspectiveCamera name="camera" fov={50} aspect={1} near={0.1} far={1000} position={this.cameraPosition} rotation={this.cameraRotation}/>
