@@ -12,7 +12,6 @@ class App extends React.Component {
 		super(props);
 
 		this.state = {
-			messageValue: '',
 			string: '',
 			rotationDegrees: { 
 				x: 0, 
@@ -38,13 +37,13 @@ class App extends React.Component {
 			console.log("============");
 		});
 
-		subscribeToOrientation((err, message) => {
+		subscribeToOrientation((err, orientation) => {
 			this.setState({
-				string : "X: "+ message.x + ", Y: " + message.y + ", Z: " + message.z,
+				string : "X: "+ orientation.x + ", Y: " + orientation.y + ", Z: " + orientation.z,
 				rotationDegrees : {
-					x : message.x,
-					y : message.y,
-					z : message.z
+					x : orientation.x,
+					y : orientation.y,
+					z : orientation.z
 				}
 			});
 		});

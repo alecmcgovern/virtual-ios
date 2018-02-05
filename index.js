@@ -32,7 +32,7 @@ io.on('connection', function(client) {
 
 	// send device orientation
 	client.on('sendOrientation', (orientation) => {
-		console.log("client sent this orientation: " + orientation);
+		console.log("client sent an orientation: ");
 		io.emit('orientationReceived', orientation);
 	});
 
