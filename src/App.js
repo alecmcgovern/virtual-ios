@@ -4,8 +4,8 @@ import {
 	subscribeToActiveClientList, 
 	subscribeToClientConnection, 
 	subscribeToClientDisconnection, 
-	subscribeToControllingUserConnected,
-	subscribeToControllingUserDisconnected,
+	// subscribeToControllingUserConnected,
+	// subscribeToControllingUserDisconnected,
 
 	subscribeToOrientation, 
 	sendOrientation 
@@ -30,8 +30,7 @@ class App extends React.Component {
 				y: 0, 
 				z: 0 
 			},
-			clientList: [],
-			controllingClientId: null
+			activeClientList: {}
 		}
 
 		this.orientationChange = this.orientationChange.bind(this);
@@ -50,27 +49,27 @@ class App extends React.Component {
 			console.log(clientId + " has disconnected");
 		});
 
-		subscribeToActiveClientList((err, clientList) => {
+		subscribeToActiveClientList((err, activeClientList) => {
 			console.log("CLIENT LIST");
-			console.log(clientList);
+			console.log(activeClientList);
 			this.setState({
-				clientList: clientList
+				activeClientList: activeClientList
 			})
 		});
 
-		subscribeToControllingUserConnected((err, clientId) => {
-			console.log(clientId + " is now controlling the orientation");
-			this.setState({
-				controllingClientId: clientId
-			});
-		});
+// 		subscribeToControllingUserConnected((err, clientId) => {
+// 			console.log(clientId + " is now controlling the orientation");
+// 			this.setState({
+// 				controllingClientId: clientId
+// 			});
+// 		});
 
-		subscribeToControllingUserDisconnected((err, clientId) => {
-			console.log("no one in control orientation");
-			this.setState({
-				controllingClientId: null
-			});
-;		});
+// 		subscribeToControllingUserDisconnected((err, clientId) => {
+// 			console.log("no one in control orientation");
+// 			this.setState({
+// 				controllingClientId: null
+// 			});
+// ;		});
 
 		subscribeToOrientation((err, orientation) => {
 			this.setState({
@@ -147,7 +146,7 @@ class App extends React.Component {
 		rotation = new THREE.Euler(xRadians, yRadians, zRadians);
 
 
-		let welcomeVisible = !this.state.controllingClientId;
+		let welcomeVisible = !this.state.activeClientList.controller;
 
 		return (
 			<div className="app">

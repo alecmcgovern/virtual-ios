@@ -16,12 +16,19 @@ app.get('*', (req, res) => {
 
 let controllingUserId = null;
 
+let activeClients = { 
+	controller: null, 
+	allUsers: []
+}
+
 io.on('connection', function(client) {
 	// CONNECT / DISCONNECT
 	console.log(client.id + " connected");
 	io.emit('clientConnected', client.id);
 	io.clients((err, clients) => {
-		io.emit('activeClientList', clients);
+		activeClients.allUsers = clients;
+		activeClients.controller = controllingUserId;
+		io.emit('activeClientList', activeClients);
 	});
 
 	client.on('disconnect', (reason) => {
@@ -34,14 +41,18 @@ io.on('connection', function(client) {
 		}
 
 		io.clients((err, clients) => {
-			io.emit('activeClientList', clients);
+			activeClients.allUsers = clients;
+			activeClients.controller = controllingUserId;
+			io.emit('activeClientList', activeClients);
 		});
 	});
 
 	client.on('sendDeviceType', (deviceType) => {
 		if (deviceType === "iOS" && controllingUserId === null) {
 			controllingUserId = client.id;
-			io.emit('controllingUserConnected', controllingUserId);
+
+			activeClients.controller = controllingUserId;
+			io.emit('activeClientList', activeClients);
 		}
 	});
 
@@ -52,7 +63,6 @@ io.on('connection', function(client) {
 			io.emit('orientationReceived', orientation);
 		}
 	});
-
 });
 
 server.listen(PORT, () => {

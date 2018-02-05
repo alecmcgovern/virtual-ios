@@ -17,13 +17,13 @@ function subscribeToActiveClientList(callback) {
 	socket.on('activeClientList', activeClientList => callback(null, activeClientList));
 }
 
-function subscribeToControllingUserConnected(callback) {
-	socket.on('controllingUserConnected', controllingUserConnected => callback(null, controllingUserConnected));
-}
+// function subscribeToControllingUserConnected(callback) {
+// 	socket.on('controllingUserConnected', controllingUserConnected => callback(null, controllingUserConnected));
+// }
 
-function subscribeToControllingUserDisconnected(callback) {
-	socket.on('controllingUserDisconnected', controllingUserDisconnected => callback(null, controllingUserDisconnected));
-}
+// function subscribeToControllingUserDisconnected(callback) {
+// 	socket.on('controllingUserDisconnected', controllingUserDisconnected => callback(null, controllingUserDisconnected));
+// }
 
 function sendDeviceType(deviceType) {
 	socket.emit('sendDeviceType', deviceType);
@@ -45,8 +45,8 @@ export {
 	subscribeToActiveClientList, 
 	subscribeToClientConnection, 
 	subscribeToClientDisconnection, 
-	subscribeToControllingUserConnected,
-	subscribeToControllingUserDisconnected,
+	// subscribeToControllingUserConnected,
+	// subscribeToControllingUserDisconnected,
 
 	subscribeToOrientation, 
 	sendOrientation 
