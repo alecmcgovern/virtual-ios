@@ -3,12 +3,14 @@
     width: 100%;
     height: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     background-color: white;
 
     opacity: 0;
     transition: 1s opacity linear;
+    pointer-events: none;
 }
 
 .show {
@@ -17,5 +19,4 @@
 
 .qr-code {
     width: 600px;
-    height: 600px;
 }

@@ -4,8 +4,6 @@ import {
 	subscribeToActiveClientList, 
 	subscribeToClientConnection, 
 	subscribeToClientDisconnection, 
-	// subscribeToControllingUserConnected,
-	// subscribeToControllingUserDisconnected,
 
 	subscribeToOrientation, 
 	sendOrientation 
@@ -57,20 +55,6 @@ class App extends React.Component {
 			})
 		});
 
-// 		subscribeToControllingUserConnected((err, clientId) => {
-// 			console.log(clientId + " is now controlling the orientation");
-// 			this.setState({
-// 				controllingClientId: clientId
-// 			});
-// 		});
-
-// 		subscribeToControllingUserDisconnected((err, clientId) => {
-// 			console.log("no one in control orientation");
-// 			this.setState({
-// 				controllingClientId: null
-// 			});
-// ;		});
-
 		subscribeToOrientation((err, orientation) => {
 			this.setState({
 				string : "X: "+ orientation.x + ", Y: " + orientation.y + ", Z: " + orientation.z,
@@ -95,6 +79,27 @@ class App extends React.Component {
 		if(window.DeviceOrientationEvent) {
 			window.addEventListener("deviceorientation", this.orientationChange);
 		}
+
+		// for ( var i = 0; i < this.refs.phone.faces.length; i = i + 2 ) {
+		// 	let color = Math.random() * 0xffffff;
+		// 	this.refs.phone.faces[ i ].color.setHex( color );
+		// 	this.refs.phone.faces[ i + 1 ].color.setHex( color );
+		// 	console.log("faces " + i + " and " + (i+1) + " are colored " + color); 
+		// }
+
+		this.refs.phone.faces[ 0 ].color.setHex( 0xff0000 );
+		this.refs.phone.faces[ 1 ].color.setHex( 0xff0000 );
+		this.refs.phone.faces[ 2 ].color.setHex( 0xdf9000 );
+		this.refs.phone.faces[ 3 ].color.setHex( 0xdf9000 );
+		this.refs.phone.faces[ 4 ].color.setHex( 0xffff00 );
+		this.refs.phone.faces[ 5 ].color.setHex( 0xffff00 );
+
+		this.refs.phone.faces[ 6 ].color.setHex( 0x10ff00 );
+		this.refs.phone.faces[ 7 ].color.setHex( 0x10ff00 );
+		this.refs.phone.faces[ 8 ].color.setHex( 0x004be6 );
+		this.refs.phone.faces[ 9 ].color.setHex( 0x004be6 );
+		this.refs.phone.faces[ 10 ].color.setHex( 0x860079 );
+		this.refs.phone.faces[ 11 ].color.setHex( 0x860079 );
 	}
 
 	componentWillUnmount() {
@@ -135,7 +140,7 @@ class App extends React.Component {
 		let heightSegments = 0;
 		let depthSegments = 0;
 
-		let color = new THREE.Color(0x004be6);
+		let color = new THREE.Color(0xffffff);
 
 		// Box Rotation
 		const xRadians = this.degreeToRadian(this.state.rotationDegrees.x - 90);
@@ -159,7 +164,7 @@ class App extends React.Component {
 							<mesh rotation={rotation}>
 								<boxGeometry ref="phone" width={width} height={height} depth={depth}
 									widthSegments={widthSegments} heightSegments={heightSegments} depthSegments={depthSegments} />
-								<meshLambertMaterial wireframe={wireframe} color={color}>
+								<meshLambertMaterial wireframe={wireframe} color={color} vertexColors={THREE.FaceColors}>
 								</meshLambertMaterial>
 							</mesh>
 							<object3D>
