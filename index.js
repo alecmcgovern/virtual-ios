@@ -17,16 +17,26 @@ app.get('*', (req, res) => {
 io.on('connection', function(client) {
 	console.log(client.id + " connected");
 	io.emit('clientConnected', client.id);
+	io.clients((err, clients) => {
+		io.emit('activeClientList', clients);
+	});
 
 	client.on('sendMessage', (message) => {
 		console.log("client sent this message: " + message);
 		io.emit('messageReceived', message);
 	});
-});
 
-io.on('disconnect', function(client) {
-	console.log(client.id + " disconnected");
-	io.emit('clientDisconnected', client.id);
+	client.on('disconnect', (reason) => {
+		console.log(client.id + " disconnected because: " + reason);
+		io.emit('clientDisconnected', client.id);
+		io.clients((err, clients) => {
+			io.emit('activeClientList', clients);
+		});
+	})
+
+	// setTimeout(() => {
+	// 	client.disconnect(true);
+	// }, 5000);
 });
 
 server.listen(PORT, () => {

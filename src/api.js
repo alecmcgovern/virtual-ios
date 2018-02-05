@@ -11,6 +11,10 @@ function subscribeToClientDisconnection(callback) {
 	socket.on('clientDisconnected', clientDisconnected => callback(null, clientDisconnected));
 }
 
+function subscribeToActiveClientList(callback) {
+	socket.on('activeClientList', activeClientList => callback(null, activeClientList));
+}
+
 function subscribeToMessages(callback) {
 	socket.on('messageReceived', messageReceived => callback(null, messageReceived));
 }
@@ -19,4 +23,4 @@ function sendMessage(message) {
 	socket.emit('sendMessage', message);
 }
 
-export { subscribeToClientConnection, subscribeToClientDisconnection, subscribeToMessages, sendMessage };
+export { subscribeToActiveClientList, subscribeToClientConnection, subscribeToClientDisconnection, subscribeToMessages, sendMessage };
