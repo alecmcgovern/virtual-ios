@@ -7,12 +7,12 @@
     align-items: center;
     background-color: white;
 
-    opacity: 1;
+    opacity: 0;
     transition: 1s opacity linear;
 }
 
 .show {
-	opacity: 0;
+	opacity: 1;
 }
 
 .qr-code {

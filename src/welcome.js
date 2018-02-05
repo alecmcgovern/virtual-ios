@@ -16,6 +16,7 @@ class Welcome extends React.Component {
 		if (this.props.visible) {
 			welcomeContainerClass += " show";
 		}
+		
 		return (
 			<div className={welcomeContainerClass}>
 				<img className="qr-code" src={qrCode} />
