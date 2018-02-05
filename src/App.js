@@ -118,42 +118,44 @@ class App extends React.Component {
 		rotation = new THREE.Euler(xRadians, yRadians, zRadians);
 
 
-		let welcomeVisible = this.state.clientList.length === 2;
+		let welcomeVisible = this.state.clientList.length === 1;
 
 		return (
 			<div className="app">
 				<Welcome visible={welcomeVisible} />
-				<div className="orientation">{this.state.string}</div>
-				<React3 key={1} antialias={true} mainCamera="camera" width={size} height={size} alpha={true} onAnimate={() => this.onAnimate()}>
-					<scene>
-						<perspectiveCamera name="camera" fov={50} aspect={1} near={0.1} far={1000} position={this.cameraPosition} rotation={this.cameraRotation}/>
-						<mesh rotation={rotation}>
-							<boxGeometry ref="phone" width={width} height={height} depth={depth}
-								widthSegments={widthSegments} heightSegments={heightSegments} depthSegments={depthSegments} />
-							<meshLambertMaterial wireframe={wireframe} color={color}>
-							</meshLambertMaterial>
-						</mesh>
-						<object3D>
-							<ambientLight/>
-						</object3D>
-						<directionalLight
-							color={0xffffff}
-							intensity={1.75}
-							castShadow
-							shadowMapWidth={1024}
-							shadowMapHeight={1024}
-							shadowCameraLeft={-d}
-							shadowCameraRight={d}
-							shadowCameraTop={d}
-							shadowCameraBottom={-d}
+				<div className="main-canvas">
+					<div className="orientation">{this.state.string}</div>
+					<React3 key={1} antialias={true} mainCamera="camera" width={size} height={size} alpha={true} onAnimate={() => this.onAnimate()}>
+						<scene>
+							<perspectiveCamera name="camera" fov={50} aspect={1} near={0.1} far={1000} position={this.cameraPosition} rotation={this.cameraRotation}/>
+							<mesh rotation={rotation}>
+								<boxGeometry ref="phone" width={width} height={height} depth={depth}
+									widthSegments={widthSegments} heightSegments={heightSegments} depthSegments={depthSegments} />
+								<meshLambertMaterial wireframe={wireframe} color={color}>
+								</meshLambertMaterial>
+							</mesh>
+							<object3D>
+								<ambientLight/>
+							</object3D>
+							<directionalLight
+								color={0xffffff}
+								intensity={1.75}
+								castShadow
+								shadowMapWidth={1024}
+								shadowMapHeight={1024}
+								shadowCameraLeft={-d}
+								shadowCameraRight={d}
+								shadowCameraTop={d}
+								shadowCameraBottom={-d}
 
-							shadowCameraFar={3 * d}
-							shadowCameraNear={d}
+								shadowCameraFar={3 * d}
+								shadowCameraNear={d}
 
-							position={this.lightPosition}
-							lookAt={this.lightTarget} />
-					</scene>
-				</React3>
+								position={this.lightPosition}
+								lookAt={this.lightTarget} />
+						</scene>
+					</React3>
+				</div>
 			</div>
 		);
 	}
