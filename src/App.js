@@ -71,19 +71,20 @@ class App extends React.Component {
 					inControl: false
 				});
 				console.log("you are not the controlling user");
+
+				subscribeToOrientation((err, orientation) => {
+					this.setState({
+						string : "X: "+ orientation.x + ", Y: " + orientation.y + ", Z: " + orientation.z,
+						rotationDegrees : {
+							x : orientation.x,
+							y : orientation.y,
+							z : orientation.z
+						}
+					});
+				});
 			}
 		});
 
-		subscribeToOrientation((err, orientation) => {
-			this.setState({
-				string : "X: "+ orientation.x + ", Y: " + orientation.y + ", Z: " + orientation.z,
-				rotationDegrees : {
-					x : orientation.x,
-					y : orientation.y,
-					z : orientation.z
-				}
-			});
-		});
 
 		this.cameraPosition = new THREE.Vector3(0,30,160);
 		this.cameraRotation = new THREE.Euler(this.degreeToRadian(0),this.degreeToRadian(0),this.degreeToRadian(0));
@@ -134,11 +135,26 @@ class App extends React.Component {
 
 	orientationChange(event) {
 		if (event.alpha && event.beta && event.gamma) {
+			const x = event.beta.toFixed(0);
+			const y = event.gamma.toFixed(0);
+			const z = event.alpha.toFixed(0);
+
 			sendOrientation({ 
-				x: event.beta.toFixed(0),
-				y: event.gamma.toFixed(0),
-				z: event.alpha.toFixed(0)
+				x: x,
+				y: y,
+				z: z
 			});
+
+			if (this.state.inControl) {
+				this.setState({
+					string : "X: "+ x + ", Y: " + y + ", Z: " + z,
+					rotationDegrees : {
+						x : x,
+						y : y,
+						z : z
+					}
+				});
+			}
 		}
 	}
 
