@@ -14,6 +14,8 @@ app.get('*', (req, res) => {
 	res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
+let controllingUserId = null;
+
 io.on('connection', function(client) {
 	// CONNECT / DISCONNECT
 	console.log(client.id + " connected");
@@ -25,15 +27,25 @@ io.on('connection', function(client) {
 	client.on('disconnect', (reason) => {
 		console.log(client.id + " disconnected because: " + reason);
 		io.emit('clientDisconnected', client.id);
+		controllingUserId = null;
 		io.clients((err, clients) => {
 			io.emit('activeClientList', clients);
 		});
 	});
 
+	client.on('sendDeviceType', (deviceType) => {
+		if (deviceType === "iOS" && controllingUserId === null) {
+			controllingUserId = client.id;
+			io.emit('controllingUserConnected', controllingUserId);
+		}
+	});
+
 	// send device orientation
 	client.on('sendOrientation', (orientation) => {
-		console.log("client sent an orientation: ");
-		io.emit('orientationReceived', orientation);
+		if (controllingUserId === client.id) {
+			console.log("client sent an orientation: ");
+			io.emit('orientationReceived', orientation);
+		}
 	});
 
 });

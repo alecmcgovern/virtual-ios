@@ -1,5 +1,14 @@
 import React from 'react';
-import { subscribeToActiveClientList, subscribeToClientConnection, subscribeToClientDisconnection, sendOrientation, subscribeToOrientation } from './api';
+import { 
+	sendDeviceType, 
+	subscribeToActiveClientList, 
+	subscribeToClientConnection, 
+	subscribeToClientDisconnection, 
+	subscribeToControllingUserConnected,
+
+	subscribeToOrientation, 
+	sendOrientation 
+} from './api';
 
 import React3 from 'react-three-renderer';
 import * as THREE from 'three';
@@ -27,6 +36,12 @@ class App extends React.Component {
 
 		subscribeToClientConnection((err, clientId) => {
 			console.log(clientId + " has connected");
+
+			let iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+			if (iOS) {
+				sendDeviceType("iOS");
+			}
 		});
 
 		subscribeToClientDisconnection((err, clientId) => {
@@ -34,13 +49,15 @@ class App extends React.Component {
 		});
 
 		subscribeToActiveClientList((err, clientList) => {
-			console.log("============");
 			console.log("CLIENT LIST");
 			console.log(clientList);
-			console.log("============");
 			this.setState({
 				clientList: clientList
 			})
+		});
+
+		subscribeToControllingUserConnected((err, clientId) => {
+			console.log(clientId + " is now controlling the orientation");
 		});
 
 		subscribeToOrientation((err, orientation) => {

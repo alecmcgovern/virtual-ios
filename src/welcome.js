@@ -5,9 +5,6 @@ import qrCode from './images/qr-code.jpg';
 import './welcome.css';
 
 class Welcome extends React.Component {
-	constructor(props) {
-		super(props);
-	}
 
 	render() {
 		let welcomeContainerClass = "welcome-container";
@@ -16,10 +13,10 @@ class Welcome extends React.Component {
 		if (this.props.visible) {
 			welcomeContainerClass += " show";
 		}
-		
+
 		return (
 			<div className={welcomeContainerClass}>
-				<img className="qr-code" src={qrCode} />
+				<img className="qr-code" src={qrCode} alt="" />
 			</div>
 		);
 	}
