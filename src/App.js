@@ -4,6 +4,8 @@ import { subscribeToActiveClientList, subscribeToClientConnection, subscribeToCl
 import React3 from 'react-three-renderer';
 import * as THREE from 'three';
 
+import Welcome from './welcome.js';
+
 import './App.css';
 
 class App extends React.Component {
@@ -17,7 +19,8 @@ class App extends React.Component {
 				x: 0, 
 				y: 0, 
 				z: 0 
-			}
+			},
+			clientList: []
 		}
 
 		this.orientationChange = this.orientationChange.bind(this);
@@ -35,6 +38,9 @@ class App extends React.Component {
 			console.log("CLIENT LIST");
 			console.log(clientList);
 			console.log("============");
+			this.setState({
+				clientList: clientList
+			})
 		});
 
 		subscribeToOrientation((err, orientation) => {
@@ -89,7 +95,7 @@ class App extends React.Component {
 		const d = 20;
 
 		// Canvas size
-		let size = 400;
+		let size = 600;
 
 		// Box sizing, segments
 		let wireframe = false;
@@ -111,9 +117,12 @@ class App extends React.Component {
 		let rotation;
 		rotation = new THREE.Euler(xRadians, yRadians, zRadians);
 
+
+		let welcomeVisible = this.state.clientList.length === 2;
+
 		return (
 			<div className="app">
-				<div className="header"></div>
+				<Welcome visible={welcomeVisible} />
 				<div className="orientation">{this.state.string}</div>
 				<React3 key={1} antialias={true} mainCamera="camera" width={size} height={size} alpha={true} onAnimate={() => this.onAnimate()}>
 					<scene>

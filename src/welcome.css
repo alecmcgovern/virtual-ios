@@ -1,0 +1,13 @@
+.welcome-container {
+    position: absolute;
+    visibility: hidden;
+}
+
+.show {
+	visibility: visible;
+}
+
+.qr-code {
+    width: 600px;
+    height: 600px;
+}
