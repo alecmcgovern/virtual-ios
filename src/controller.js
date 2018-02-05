@@ -16,10 +16,10 @@ class Controller extends React.Component {
 	}
 
 	calculateRed() {
-		const xOffset = Math.abs(this.props.rotation.x);
-		const yOffset = Math.abs(this.props.rotation.y);
+		const xOffset = Math.abs(this.props.rotation.x / 180);
+		const yOffset = Math.abs(this.props.rotation.y / 90);
 
-		const totalOffsetPercent = (xOffset + yOffset) / 180;
+		const totalOffsetPercent = (xOffset/2 + yOffset/2);
 
 		if (totalOffsetPercent > 0.5) {
 			return 256;
@@ -30,10 +30,10 @@ class Controller extends React.Component {
 	}
 
 	calculateGreen() {
-		const xOffset = Math.abs(this.props.rotation.x);
-		const yOffset = Math.abs(this.props.rotation.y);
+		const xOffset = Math.abs(this.props.rotation.x / 180);
+		const yOffset = Math.abs(this.props.rotation.y / 90);
 
-		const totalOffsetPercent = (xOffset + yOffset) / 180;
+		const totalOffsetPercent = (xOffset/2 + yOffset/2);
 
 		if (totalOffsetPercent < 0.5) {
 			return 256;
