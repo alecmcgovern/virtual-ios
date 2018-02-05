@@ -27,7 +27,12 @@ io.on('connection', function(client) {
 	client.on('disconnect', (reason) => {
 		console.log(client.id + " disconnected because: " + reason);
 		io.emit('clientDisconnected', client.id);
-		controllingUserId = null;
+
+		if (controllingUserId === client.id) {
+			controllingUserId = null;
+			io.emit('controllingUserDisconnected', controllingUserId);
+		}
+
 		io.clients((err, clients) => {
 			io.emit('activeClientList', clients);
 		});

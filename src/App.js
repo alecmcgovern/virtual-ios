@@ -5,6 +5,7 @@ import {
 	subscribeToClientConnection, 
 	subscribeToClientDisconnection, 
 	subscribeToControllingUserConnected,
+	subscribeToControllingUserDisconnected,
 
 	subscribeToOrientation, 
 	sendOrientation 
@@ -29,7 +30,8 @@ class App extends React.Component {
 				y: 0, 
 				z: 0 
 			},
-			clientList: []
+			clientList: [],
+			controllingClientId: null
 		}
 
 		this.orientationChange = this.orientationChange.bind(this);
@@ -58,7 +60,17 @@ class App extends React.Component {
 
 		subscribeToControllingUserConnected((err, clientId) => {
 			console.log(clientId + " is now controlling the orientation");
+			this.setState({
+				controllingClientId: clientId
+			});
 		});
+
+		subscribeToControllingUserDisconnected((err, clientId) => {
+			console.log("no one in control orientation");
+			this.setState({
+				controllingClientId: null
+			});
+;		});
 
 		subscribeToOrientation((err, orientation) => {
 			this.setState({
@@ -135,7 +147,7 @@ class App extends React.Component {
 		rotation = new THREE.Euler(xRadians, yRadians, zRadians);
 
 
-		let welcomeVisible = this.state.clientList.length === 1;
+		let welcomeVisible = this.state.controllingClientId;
 
 		return (
 			<div className="app">
