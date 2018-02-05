@@ -1,5 +1,5 @@
 import React from 'react';
-import { subscribeToClientConnection, sendMessage, subscribeToMessages } from './api';
+import { subscribeToClientConnection, subscribeToClientDisconnection, sendMessage, subscribeToMessages } from './api';
 
 import React3 from 'react-three-renderer';
 import * as THREE from 'three';
@@ -25,6 +25,10 @@ class App extends React.Component {
 
 		subscribeToClientConnection((err, clientId) => {
 			console.log(clientId + " has connected");
+		});
+
+		subscribeToClientDisconnection((err, clientId) => {
+			console.log(clientId + " has disconnected");
 		});
 
 		subscribeToMessages((err, message) => {

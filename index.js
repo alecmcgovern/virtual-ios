@@ -15,14 +15,18 @@ app.get('*', (req, res) => {
 });
 
 io.on('connection', function(client) {
-	console.log('client connected!');
-	console.log(client.id);
+	console.log(client.id + " connected");
 	io.emit('clientConnected', client.id);
 
 	client.on('sendMessage', (message) => {
 		console.log("client sent this message: " + message);
 		io.emit('messageReceived', message);
 	});
+});
+
+io.on('disconnect', function(client) {
+	console.log(client.id + " disconnected");
+	io.emit('clientDisconnected', client.id);
 });
 
 server.listen(PORT, () => {
