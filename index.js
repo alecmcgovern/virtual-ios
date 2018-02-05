@@ -16,6 +16,8 @@ app.get('*', (req, res) => {
 
 io.on('connection', function(client) {
 	console.log('client connected!');
+	console.log(client.id);
+	io.emit('clientConnected', client.id);
 
 	client.on('sendMessage', (message) => {
 		console.log("client sent this message: " + message);

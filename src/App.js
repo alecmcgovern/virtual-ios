@@ -1,5 +1,5 @@
 import React from 'react';
-import { sendMessage, subscribeToMessages } from './api';
+import { subscribeToClientConnection, sendMessage, subscribeToMessages } from './api';
 
 import React3 from 'react-three-renderer';
 import * as THREE from 'three';
@@ -10,9 +10,6 @@ class App extends React.Component {
 
 	constructor(props) {
 		super(props);
-
-		this.cameraPosition = new THREE.Vector3(0,-160,160);
-		this.cameraRotation = new THREE.Euler(this.degreeToRadian(40),this.degreeToRadian(0),this.degreeToRadian(0));
 
 		this.state = {
 			messageValue: '',
@@ -26,6 +23,10 @@ class App extends React.Component {
 
 		this.orientationChange = this.orientationChange.bind(this);
 
+		subscribeToClientConnection((err, clientId) => {
+			console.log(clientId + " has connected");
+		});
+
 		subscribeToMessages((err, message) => {
 			this.setState({
 				string : "X: "+ message.x + ", Y: " + message.y + ", Z: " + message.z,
@@ -38,6 +39,9 @@ class App extends React.Component {
 		});
 
 		const d = 20;
+
+		this.cameraPosition = new THREE.Vector3(0,-160,160);
+		this.cameraRotation = new THREE.Euler(this.degreeToRadian(40),this.degreeToRadian(0),this.degreeToRadian(0));
 
 		this.lightPosition = new THREE.Vector3(d, d, d);
 		this.lightTarget = new THREE.Vector3(0, 0, 0);
