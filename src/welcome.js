@@ -9,8 +9,8 @@ class Welcome extends React.Component {
 	render() {
 		let welcomeContainerClass = "welcome-container";
 
-		if (false) {
-		// if (this.props.visible) {
+		// if (false) {
+		if (this.props.visible) {
 			welcomeContainerClass += " show";
 		}
 

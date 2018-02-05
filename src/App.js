@@ -14,6 +14,8 @@ import * as THREE from 'three';
 
 import Welcome from './welcome.js';
 
+import phoneScreen from './images/phoneScreen.png';
+
 import './App.css';
 
 class App extends React.Component {
@@ -80,24 +82,27 @@ class App extends React.Component {
 			window.addEventListener("deviceorientation", this.orientationChange);
 		}
 
-		// for ( var i = 0; i < this.refs.phone.faces.length; i = i + 2 ) {
-		// 	let color = Math.random() * 0xffffff;
-		// 	this.refs.phone.faces[ i ].color.setHex( color );
-		// 	this.refs.phone.faces[ i + 1 ].color.setHex( color );
-		// 	console.log("faces " + i + " and " + (i+1) + " are colored " + color); 
-		// }
+		// RIGHT EDGE -GREEN
+		this.refs.phone.faces[ 0 ].color.setHex( 0x10ff00 );
+		this.refs.phone.faces[ 1 ].color.setHex( 0x10ff00 );
 
-		this.refs.phone.faces[ 0 ].color.setHex( 0xff0000 );
-		this.refs.phone.faces[ 1 ].color.setHex( 0xff0000 );
-		this.refs.phone.faces[ 2 ].color.setHex( 0xdf9000 );
-		this.refs.phone.faces[ 3 ].color.setHex( 0xdf9000 );
-		this.refs.phone.faces[ 4 ].color.setHex( 0xffff00 );
-		this.refs.phone.faces[ 5 ].color.setHex( 0xffff00 );
+		// LEFT EDGE - YELLOW
+		this.refs.phone.faces[ 2 ].color.setHex( 0xffff00 );
+		this.refs.phone.faces[ 3 ].color.setHex( 0xffff00 );
 
-		this.refs.phone.faces[ 6 ].color.setHex( 0x10ff00 );
-		this.refs.phone.faces[ 7 ].color.setHex( 0x10ff00 );
-		this.refs.phone.faces[ 8 ].color.setHex( 0x004be6 );
-		this.refs.phone.faces[ 9 ].color.setHex( 0x004be6 );
+		// BACK EDGE - ORANGE
+		this.refs.phone.faces[ 4 ].color.setHex( 0xdf9000 );
+		this.refs.phone.faces[ 5 ].color.setHex( 0xdf9000 );
+
+		// FRONT EDGE - RED
+		this.refs.phone.faces[ 6 ].color.setHex( 0xff0000 );
+		this.refs.phone.faces[ 7 ].color.setHex( 0xff0000 );
+
+		// TOP - BLUE
+		this.refs.phone.faces[ 8 ].color.setHex( 0x120196 );
+		this.refs.phone.faces[ 9 ].color.setHex( 0x120196 );
+
+		// BOTTOM - PURPLE
 		this.refs.phone.faces[ 10 ].color.setHex( 0x860079 );
 		this.refs.phone.faces[ 11 ].color.setHex( 0x860079 );
 	}
@@ -164,7 +169,7 @@ class App extends React.Component {
 							<mesh rotation={rotation}>
 								<boxGeometry ref="phone" width={width} height={height} depth={depth}
 									widthSegments={widthSegments} heightSegments={heightSegments} depthSegments={depthSegments} />
-								<meshLambertMaterial wireframe={wireframe} color={color} vertexColors={THREE.FaceColors}>
+								<meshLambertMaterial wireframe={wireframe} color={color} vertexColors={THREE.VertexColors}>
 								</meshLambertMaterial>
 							</mesh>
 							<object3D>
