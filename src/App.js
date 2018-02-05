@@ -102,7 +102,7 @@ class App extends React.Component {
 		let color = new THREE.Color(0x004be6);
 
 		// Box Rotation
-		const xRadians = this.degreeToRadian(this.state.rotationDegrees.x);
+		const xRadians = this.degreeToRadian(this.state.rotationDegrees.x - 90);
 		const yRadians = this.degreeToRadian(this.state.rotationDegrees.y);
 		const zRadians = this.degreeToRadian(this.state.rotationDegrees.z);
 
