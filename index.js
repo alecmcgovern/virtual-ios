@@ -28,7 +28,7 @@ io.on('connection', function(client) {
 		io.clients((err, clients) => {
 			io.emit('activeClientList', clients);
 		});
-	})
+	});
 
 	// send device orientation
 	client.on('sendOrientation', (orientation) => {
