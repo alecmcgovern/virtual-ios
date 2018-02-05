@@ -8,6 +8,8 @@ class Controller extends React.Component {
 
 		const red = this.calculateRed();
 		const green = this.calculateGreen();
+		// const red = 256;
+		// const green = 256;
 		const blue = 0;
 
 		this.state = {
@@ -16,7 +18,7 @@ class Controller extends React.Component {
 	}
 
 	calculateRed() {
-		const xOffset = Math.abs(this.props.rotation.x / 180);
+		const xOffset = Math.abs(this.props.rotation.x / 90);
 		const yOffset = Math.abs(this.props.rotation.y / 90);
 
 		const maxOffset = Math.max(xOffset, yOffset);
@@ -30,13 +32,15 @@ class Controller extends React.Component {
 	}
 
 	calculateGreen() {
-		const xOffset = Math.abs(this.props.rotation.x / 180);
+		const xOffset = Math.abs(this.props.rotation.x / 90);
 		const yOffset = Math.abs(this.props.rotation.y / 90);
 
 		const maxOffset = Math.max(xOffset, yOffset);
 
 		if (maxOffset < 0.5) {
 			return 256;
+		} else if (maxOffset > 1) {
+			return 0;
 		} else {
 			let green = (1 - maxOffset)*2 * 256;
 			return green.toFixed(0);

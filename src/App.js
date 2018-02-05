@@ -72,19 +72,21 @@ class App extends React.Component {
 				});
 				console.log("you are not the controlling user");
 
-				subscribeToOrientation((err, orientation) => {
-					this.setState({
-						string : "X: "+ orientation.x + ", Y: " + orientation.y + ", Z: " + orientation.z,
-						rotationDegrees : {
-							x : orientation.x,
-							y : orientation.y,
-							z : orientation.z
-						}
-					});
-				});
 			}
 		});
 
+		subscribeToOrientation((err, orientation) => {
+			if (!this.state.inControl) {
+				this.setState({
+					string : "X: "+ orientation.x + ", Y: " + orientation.y + ", Z: " + orientation.z,
+					rotationDegrees : {
+						x : orientation.x,
+						y : orientation.y,
+						z : orientation.z
+					}
+				});
+			}
+		});
 
 		this.cameraPosition = new THREE.Vector3(0,30,160);
 		this.cameraRotation = new THREE.Euler(this.degreeToRadian(0),this.degreeToRadian(0),this.degreeToRadian(0));
