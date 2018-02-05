@@ -50,8 +50,8 @@ class App extends React.Component {
 
 		const d = 20;
 
-		this.cameraPosition = new THREE.Vector3(0,-160,160);
-		this.cameraRotation = new THREE.Euler(this.degreeToRadian(40),this.degreeToRadian(0),this.degreeToRadian(0));
+		this.cameraPosition = new THREE.Vector3(0,0,160);
+		this.cameraRotation = new THREE.Euler(this.degreeToRadian(0),this.degreeToRadian(0),this.degreeToRadian(0));
 
 		this.lightPosition = new THREE.Vector3(d, d, d);
 		this.lightTarget = new THREE.Vector3(0, 0, 0);
