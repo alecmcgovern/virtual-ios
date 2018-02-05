@@ -19,12 +19,12 @@ class Controller extends React.Component {
 		const xOffset = Math.abs(this.props.rotation.x / 180);
 		const yOffset = Math.abs(this.props.rotation.y / 90);
 
-		const totalOffsetPercent = (xOffset/2 + yOffset/2);
+		const maxOffset = Math.max(xOffset, yOffset);
 
-		if (totalOffsetPercent > 0.5) {
+		if (maxOffset > 0.5) {
 			return 256;
 		} else {
-			let red = totalOffsetPercent*2*256;
+			let red = maxOffset*2*256;
 			return red.toFixed(0);
 		}
 	}
@@ -33,12 +33,12 @@ class Controller extends React.Component {
 		const xOffset = Math.abs(this.props.rotation.x / 180);
 		const yOffset = Math.abs(this.props.rotation.y / 90);
 
-		const totalOffsetPercent = (xOffset/2 + yOffset/2);
+		const maxOffset = Math.max(xOffset, yOffset);
 
-		if (totalOffsetPercent < 0.5) {
+		if (maxOffset < 0.5) {
 			return 256;
 		} else {
-			let green = (1 - totalOffsetPercent*2) * 256;
+			let green = (1 - maxOffset)*2 * 256;
 			return green.toFixed(0);
 		}
 	}
