@@ -50,15 +50,17 @@ class App extends React.Component {
 
 		const d = 20;
 
-		this.cameraPosition = new THREE.Vector3(0,0,160);
+		this.cameraPosition = new THREE.Vector3(0,30,160);
 		this.cameraRotation = new THREE.Euler(this.degreeToRadian(0),this.degreeToRadian(0),this.degreeToRadian(0));
 
-		this.lightPosition = new THREE.Vector3(d, d, d);
+		this.lightPosition = new THREE.Vector3(d, d, 0);
 		this.lightTarget = new THREE.Vector3(0, 0, 0);
 	}
 
 	componentDidMount() {
-		window.addEventListener("deviceorientation", this.orientationChange);
+		if(window.DeviceOrientationEvent) {
+			window.addEventListener("deviceorientation", this.orientationChange);
+		}
 	}
 
 	componentWillUnmount() {
@@ -95,8 +97,8 @@ class App extends React.Component {
 		let height = 100;
 		let depth = 5;
 
-		let widthSegments = 3;
-		let heightSegments = 5;
+		let widthSegments = 0;
+		let heightSegments = 0;
 		let depthSegments = 0;
 
 		let color = new THREE.Color(0x004be6);
@@ -117,7 +119,7 @@ class App extends React.Component {
 					<scene>
 						<perspectiveCamera name="camera" fov={50} aspect={1} near={0.1} far={1000} position={this.cameraPosition} rotation={this.cameraRotation}/>
 						<mesh rotation={rotation}>
-							<boxGeometry width={width} height={height} depth={depth}
+							<boxGeometry ref="phone" width={width} height={height} depth={depth}
 								widthSegments={widthSegments} heightSegments={heightSegments} depthSegments={depthSegments} />
 							<meshLambertMaterial wireframe={wireframe} color={color}>
 							</meshLambertMaterial>
