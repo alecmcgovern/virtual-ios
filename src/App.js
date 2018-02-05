@@ -147,7 +147,7 @@ class App extends React.Component {
 		rotation = new THREE.Euler(xRadians, yRadians, zRadians);
 
 
-		let welcomeVisible = this.state.controllingClientId;
+		let welcomeVisible = !this.state.controllingClientId;
 
 		return (
 			<div className="app">
