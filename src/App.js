@@ -12,6 +12,8 @@ import {
 
 import React3 from 'react-three-renderer';
 import * as THREE from 'three';
+import CANNON from 'cannon/src/Cannon';
+import Quaternion from 'quaternion';
 
 import Welcome from './welcome.js';
 import Controller from './controller.js';
@@ -37,6 +39,7 @@ class App extends React.Component {
 		}
 
 		this.rotation = null;
+		this.rotWorldMatrix = null;
 		this.orientationChange = this.orientationChange.bind(this);
 
 		subscribeToClientConnection((err, clientId) => {
@@ -62,33 +65,36 @@ class App extends React.Component {
 		});
 
 		subscribeToControllingUserResponse((err, response) => {
-			if (response === true) {
-				this.setState({
-					inControl: response
-				});
-				console.log("you are the controlling user");
-			} else if (response === false) {
-				this.setState({
-					inControl: response
-				});
-				console.log("you are not the controlling user");
-
+			if (!this.state.inControl) {
+				if (response) {
+					this.setState({
+						inControl: true
+					});
+					console.log("you are the controlling user");
+				} else {
+					this.setState({
+						inControl: false
+					});
+					console.log("you are not the controlling user");
+				}
 			}
 		});
 
 		subscribeToOrientation((err, orientation) => {
-			this.setState({
-				string : "X: "+ orientation.x + ", Y: " + orientation.y + ", Z: " + orientation.z,
-				rotationDegrees : {
-					x : orientation.x,
-					y : orientation.y,
-					z : orientation.z
-				}
+			window.requestAnimationFrame(() => {
+				this.setState({
+					string : "X: "+ orientation.x + ", Y: " + orientation.y + ", Z: " + orientation.z,
+					rotationDegrees : {
+						x : orientation.x,
+						y : orientation.y,
+						z : orientation.z
+					}
+				});
 			});
 		});
 
 		this.cameraPosition = new THREE.Vector3(0,30,160);
-		this.cameraRotation = new THREE.Euler(this.degreeToRadian(0),this.degreeToRadian(0),this.degreeToRadian(0));
+		this.cameraRotation = new THREE.Euler(THREE.Math.degToRad(0),THREE.Math.degToRad(0),THREE.Math.degToRad(0));
 
 		this.lightPosition = new THREE.Vector3(20, 20, 0);
 		this.lightTarget = new THREE.Vector3(0, 0, 0);
@@ -148,42 +154,43 @@ class App extends React.Component {
 		}
 	}
 
-	onAnimate() {
-
-	}
-
-	degreeToRadian(degree) {
-		return degree*(Math.PI/180);
-	}
-
-
-
 	render() {
-		const d = 20;
-
 		// Canvas size
-		let size = 600;
+		const size = 600;
 
 		// Box sizing, segments
 		let wireframe = false;
-		let width = 60;
-		let height = 100;
-		let depth = 5;
+		const width = 60;
+		const height = 100;
+		const depth = 5;
 
-		let widthSegments = 0;
-		let heightSegments = 0;
-		let depthSegments = 0;
+		const widthSegments = 0;
+		const heightSegments = 0;
+		const depthSegments = 0;
 
-		let color = new THREE.Color(0xffffff);
+		const color = new THREE.Color(0xffffff);
 
 		// Calculate Rotation
-		const xRadians = this.degreeToRadian(this.state.rotationDegrees.x - 90);
-		const yRadians = this.degreeToRadian(this.state.rotationDegrees.y);
-		const zRadians = this.degreeToRadian(this.state.rotationDegrees.z);
+		const z = this.state.rotationDegrees.z ? THREE.Math.degToRad( this.state.rotationDegrees.z ) : 0; // Z
+		const x = this.state.rotationDegrees.x ? THREE.Math.degToRad( this.state.rotationDegrees.x ) : 0; // X'
+		const y = this.state.rotationDegrees.y ? THREE.Math.degToRad( this.state.rotationDegrees.y ) : 0; // Y''
 
-		this.rotation = new THREE.Euler(xRadians, yRadians, zRadians);
+		let zee = new THREE.Vector3( 0, 0, 1 );
+		let euler = new THREE.Euler();
+		let q0 = new THREE.Quaternion();
+		let q1 = new THREE.Quaternion( - Math.sqrt( 0.5 ), 0, 0, Math.sqrt( 0.5 ) );
+
+		euler.set( x, z, - y, 'YXZ' );
+
+		let quaternion = new THREE.Quaternion();
+		quaternion.setFromEuler( euler );
+		quaternion.multiply( q1 );
+		quaternion.multiply( q0.setFromAxisAngle( zee, 0 ) );
+
+		this.rotation = quaternion;
 
 		let welcomeVisible = !this.state.activeClientList.controller;
+		// let welcomeVisible = false;
 
 		return (
 			<div className="app">
@@ -192,10 +199,10 @@ class App extends React.Component {
 				{ !this.state.inControl ? 
 					<div className="main-canvas">
 						<div className="orientation">{this.state.string}</div>
-						<React3 key={1} antialias={true} mainCamera="camera" width={size} height={size} alpha={true} onAnimate={() => this.onAnimate()}>
+						<React3 key={1} antialias={true} mainCamera="camera" width={size} height={size} alpha={true}>
 							<scene>
 								<perspectiveCamera name="camera" fov={50} aspect={1} near={0.1} far={1000} position={this.cameraPosition} rotation={this.cameraRotation}/>
-								<mesh rotation={this.rotation}>
+								<mesh quaternion={this.rotation}>
 									<boxGeometry ref="phone" width={width} height={height} depth={depth}
 										widthSegments={widthSegments} heightSegments={heightSegments} depthSegments={depthSegments} />
 									<meshLambertMaterial wireframe={wireframe} color={color} vertexColors={THREE.VertexColors}>
@@ -210,13 +217,13 @@ class App extends React.Component {
 									castShadow
 									shadowMapWidth={1024}
 									shadowMapHeight={1024}
-									shadowCameraLeft={-d}
-									shadowCameraRight={d}
-									shadowCameraTop={d}
-									shadowCameraBottom={-d}
+									shadowCameraLeft={-20}
+									shadowCameraRight={20}
+									shadowCameraTop={20}
+									shadowCameraBottom={-20}
 
-									shadowCameraFar={3 * d}
-									shadowCameraNear={d}
+									shadowCameraFar={3 * 20}
+									shadowCameraNear={20}
 
 									position={this.lightPosition}
 									lookAt={this.lightTarget} />
