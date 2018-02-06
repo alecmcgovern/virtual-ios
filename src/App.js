@@ -99,12 +99,6 @@ class App extends React.Component {
 					z : orientation.z
 				}
 			});
-
-			const xRadians = this.degreeToRadian(this.state.rotationDegrees.x - 90);
-			const yRadians = this.degreeToRadian(this.state.rotationDegrees.y);
-			const zRadians = this.degreeToRadian(this.state.rotationDegrees.z);
-
-			this.rotation = new THREE.Euler(xRadians, yRadians, zRadians);
 		});
 
 		this.cameraPosition = new THREE.Vector3(0,30,160);
@@ -215,11 +209,11 @@ class App extends React.Component {
 
 
 		// } else {
-		// 	const xRadians = this.degreeToRadian(this.state.rotationDegrees.x - 90);
-		// 	const yRadians = this.degreeToRadian(this.state.rotationDegrees.y);
-		// 	const zRadians = this.degreeToRadian(this.state.rotationDegrees.z);
+			const xRadians = this.degreeToRadian(this.state.rotationDegrees.x - 90);
+			const yRadians = this.degreeToRadian(this.state.rotationDegrees.y);
+			const zRadians = this.degreeToRadian(this.state.rotationDegrees.z);
 
-		// 	this.rotation = new THREE.Euler(xRadians, yRadians, zRadians);
+			this.rotation = new THREE.Euler(xRadians, yRadians, zRadians);
 		// }
 
 
