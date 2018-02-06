@@ -62,14 +62,14 @@ class App extends React.Component {
 		});
 
 		subscribeToControllingUserResponse((err, response) => {
-			if (response) {
+			if (response === true) {
 				this.setState({
-					inControl: true
+					inControl: response
 				});
 				console.log("you are the controlling user");
-			} else {
+			} else if (response === false) {
 				this.setState({
-					inControl: false
+					inControl: response
 				});
 				console.log("you are not the controlling user");
 
