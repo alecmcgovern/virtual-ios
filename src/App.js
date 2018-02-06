@@ -238,8 +238,8 @@ class App extends React.Component {
 
 					:
 
+					/*<Controller rotation={this.state.rotationDegrees} />*/
 					<Controller rotation={this.state.rotationDegrees} />
-					/*<Controller rotation={{x: 0, y: 0, z: 0}} />*/
 				}
 
 			</div>

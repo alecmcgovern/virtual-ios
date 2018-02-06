@@ -6,10 +6,10 @@ class Controller extends React.Component {
 	constructor(props) {
 		super(props);
 
-		const red = this.calculateRed();
-		const green = this.calculateGreen();
-		// const red = 256;
-		// const green = 256;
+		// const red = this.calculateRed();
+		// const green = this.calculateGreen();
+		const red = 256;
+		const green = 256;
 		const blue = 0;
 
 		this.state = {
@@ -48,25 +48,23 @@ class Controller extends React.Component {
 	}
 
 	componentDidUpdate() {
-		const red = this.calculateRed();
-		const green = this.calculateGreen();
-		const blue = 0;
+		// const red = this.calculateRed();
+		// const green = this.calculateGreen();
+		// const blue = 0;
 
-		this.setState({
-			backgroundColor: "rgb(" + red + "," + green + "," + blue + ")" 
-		});
+		// this.setState({
+		// 	backgroundColor: "rgb(" + red + "," + green + "," + blue + ")" 
+		// });
 	}
 
 	render() {
 		return (
 			<div ref="background" className="controller-container" style={{backgroundColor:this.state.backgroundColor}}>
-				<p>You are in control</p>
-				<br />
 				<p>Hold phone flat to start</p>
 				<br />
-				<p>{"X: " + this.props.rotation.x}</p>
+				{/*<p>{"X: " + this.props.rotation.x}</p>
 				<p>{"Y: " + this.props.rotation.y}</p>
-				<p>{"Z: " + this.props.rotation.z}</p>
+				<p>{"Z: " + this.props.rotation.z}</p>*/}
 			</div>
 		);
 	}
