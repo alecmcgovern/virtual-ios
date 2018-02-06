@@ -27,11 +27,6 @@ class App extends React.Component {
 
 		this.state = {
 			string: '',
-			oldRotation: {
-				x: 0,
-				y: 0,
-				z: 0
-			},
 			rotationDegrees: { 
 				x: 0, 
 				y: 0, 
@@ -42,7 +37,6 @@ class App extends React.Component {
 		}
 
 		this.rotation = null;
-		this.autoRotating = false;
 		this.orientationChange = this.orientationChange.bind(this);
 
 		subscribeToClientConnection((err, clientId) => {
@@ -83,17 +77,8 @@ class App extends React.Component {
 		});
 
 		subscribeToOrientation((err, orientation) => {
-			const oldX = this.state.rotationDegrees.x;
-			const oldY = this.state.rotationDegrees.y;
-			const oldZ = this.state.rotationDegrees.z;
-
 			this.setState({
 				string : "X: "+ orientation.x + ", Y: " + orientation.y + ", Z: " + orientation.z,
-				oldRotation: {
-					x : oldX,
-					y : oldY,
-					z : oldZ
-				},
 				rotationDegrees : {
 					x : orientation.x,
 					y : orientation.y,
@@ -192,115 +177,11 @@ class App extends React.Component {
 		let color = new THREE.Color(0xffffff);
 
 		// Calculate Rotation
+		const xRadians = this.degreeToRadian(this.state.rotationDegrees.x - 90);
+		const yRadians = this.degreeToRadian(this.state.rotationDegrees.y);
+		const zRadians = this.degreeToRadian(this.state.rotationDegrees.z);
 
-		// dot product
-		if (!this.autoRotating) {
-			const dot = this.state.oldRotation.x * this.state.rotationDegrees.x
-				+ this.state.oldRotation.y * this.state.rotationDegrees.y
-				+ this.state.oldRotation.z * this.state.rotationDegrees.z;
-
-			const lengthOld = Math.sqrt(Math.pow(this.state.oldRotation.x, 2) 
-										+ Math.pow(this.state.oldRotation.y, 2)
-										+ Math.pow(this.state.oldRotation.z, 2));
-
-			const lengthNew = Math.sqrt(Math.pow(this.state.rotationDegrees.x, 2) 
-										+ Math.pow(this.state.rotationDegrees.y, 2)
-										+ Math.pow(this.state.rotationDegrees.z, 2));
-
-			const angle = Math.acos(dot / (lengthOld*lengthNew));
-			
-			if (angle > 10) {
-				this.autoRotating = true;
-
-				let tempX;
-				let tempY;
-				let tempZ;
-
-				if (this.state.rotationDegrees.x - this.state.oldRotation.x > 0) {
-					tempX = this.state.oldRotation.x + 1;
-				} else if (this.state.rotationDegrees.x - this.state.oldRotation.x < 0) {
-					tempX = this.state.oldRotation.x - 1;
-				} else {
-					tempX = this.state.rotationDegrees.x;
-				}
-
-				if (this.state.rotationDegrees.y - this.state.oldRotation.y > 0) {
-					tempY = this.state.oldRotation.y + 1;
-				} else if (this.state.rotationDegrees.y - this.state.oldRotation.y < 0) {
-					tempY = this.state.oldRotation.y - 1;
-				} else {
-					tempY = this.state.rotationDegrees.y;
-				}
-
-				if (this.state.rotationDegrees.z - this.state.oldRotation.z > 0) {
-					tempZ = this.state.oldRotation.z + 1;
-				} else if (this.state.rotationDegrees.z - this.state.oldRotation.z < 0) {
-					tempZ = this.state.oldRotation.z - 1;
-				} else {
-					tempZ = this.state.rotationDegrees.z;
-				}
-
-				this.setState({
-					rotationDegrees: {
-						x: tempX,
-						y: tempY,
-						z: tempZ,
-					}
-				});
-			} else {
-				const xRadians = this.degreeToRadian(this.state.rotationDegrees.x - 90);
-				const yRadians = this.degreeToRadian(this.state.rotationDegrees.y);
-				const zRadians = this.degreeToRadian(this.state.rotationDegrees.z);
-
-				this.rotation = new THREE.Euler(xRadians, yRadians, zRadians);
-			}
-		} else {
-			let tempX;
-			let tempY;
-			let tempZ;
-			let checkX = false;
-			let checkY = false;
-			let checkZ = false;
-
-			if (this.state.rotationDegrees.x - this.state.oldRotation.x > 0) {
-				tempX = this.state.oldRotation.x + 1;
-			} else if (this.state.rotationDegrees.x - this.state.oldRotation.x < 0) {
-				tempX = this.state.oldRotation.x - 1;
-			} else {
-				tempX = this.state.rotationDegrees.x;
-				checkX = true;
-			}
-
-			if (this.state.rotationDegrees.y - this.state.oldRotation.y > 0) {
-				tempY = this.state.oldRotation.y + 1;
-			} else if (this.state.rotationDegrees.y - this.state.oldRotation.y < 0) {
-				tempY = this.state.oldRotation.y - 1;
-			} else {
-				tempY = this.state.rotationDegrees.y;
-				checkY = true;
-			}
-
-			if (this.state.rotationDegrees.z - this.state.oldRotation.z > 0) {
-				tempZ = this.state.oldRotation.z + 1;
-			} else if (this.state.rotationDegrees.z - this.state.oldRotation.z < 0) {
-				tempZ = this.state.oldRotation.z - 1;
-			} else {
-				tempZ = this.state.rotationDegrees.z;
-				checkZ = true;
-			}
-
-			this.setState({
-				rotationDegrees: {
-					x: tempX,
-					y: tempY,
-					z: tempZ,
-				}
-			});
-
-			if (checkX && checkY && checkZ) {
-				this.autoRotating = false;
-			}
-		}
+		this.rotation = new THREE.Euler(xRadians, yRadians, zRadians);
 
 		let welcomeVisible = !this.state.activeClientList.controller;
 
@@ -311,7 +192,6 @@ class App extends React.Component {
 				{ !this.state.inControl ? 
 					<div className="main-canvas">
 						<div className="orientation">{this.state.string}</div>
-						<div className="auto-rotating">{"Autorotating: " + this.autoRotating}</div>
 						<React3 key={1} antialias={true} mainCamera="camera" width={size} height={size} alpha={true} onAnimate={() => this.onAnimate()}>
 							<scene>
 								<perspectiveCamera name="camera" fov={50} aspect={1} near={0.1} far={1000} position={this.cameraPosition} rotation={this.cameraRotation}/>
@@ -346,7 +226,6 @@ class App extends React.Component {
 
 					:
 
-					/*<Controller rotation={this.state.rotationDegrees} />*/
 					<Controller rotation={this.state.rotationDegrees} />
 				}
 
