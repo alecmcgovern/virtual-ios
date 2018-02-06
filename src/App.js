@@ -82,9 +82,9 @@ class App extends React.Component {
 		});
 
 		subscribeToOrientation((err, orientation) => {
-			const oldX = this.state.rotationsDegrees.x;
-			const oldY = this.state.rotationsDegrees.y;
-			const oldZ = this.state.rotationsDegrees.z;
+			const oldX = this.state.rotationDegrees.x;
+			const oldY = this.state.rotationDegrees.y;
+			const oldZ = this.state.rotationDegrees.z;
 
 			this.setState({
 				string : "X: "+ orientation.x + ", Y: " + orientation.y + ", Z: " + orientation.z,
