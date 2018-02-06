@@ -27,6 +27,11 @@ class App extends React.Component {
 
 		this.state = {
 			string: '',
+			oldRotation: {
+				x: 0,
+				y: 0,
+				z: 0
+			},
 			rotationDegrees: { 
 				x: 0, 
 				y: 0, 
@@ -36,6 +41,7 @@ class App extends React.Component {
 			inControl: false
 		}
 
+		this.rotation;
 		this.orientationChange = this.orientationChange.bind(this);
 
 		subscribeToClientConnection((err, clientId) => {
@@ -76,16 +82,29 @@ class App extends React.Component {
 		});
 
 		subscribeToOrientation((err, orientation) => {
-			if (!this.state.inControl) {
-				this.setState({
-					string : "X: "+ orientation.x + ", Y: " + orientation.y + ", Z: " + orientation.z,
-					rotationDegrees : {
-						x : orientation.x,
-						y : orientation.y,
-						z : orientation.z
-					}
-				});
-			}
+			const oldX = this.state.rotationsDegrees.x;
+			const oldY = this.state.rotationsDegrees.y;
+			const oldZ = this.state.rotationsDegrees.z;
+
+			this.setState({
+				string : "X: "+ orientation.x + ", Y: " + orientation.y + ", Z: " + orientation.z,
+				oldRotation: {
+					x : oldX,
+					y : oldY,
+					z : oldZ
+				},
+				rotationDegrees : {
+					x : orientation.x,
+					y : orientation.y,
+					z : orientation.z
+				}
+			});
+
+			const xRadians = this.degreeToRadian(this.state.rotationDegrees.x - 90);
+			const yRadians = this.degreeToRadian(this.state.rotationDegrees.y);
+			const zRadians = this.degreeToRadian(this.state.rotationDegrees.z);
+
+			this.rotation = new THREE.Euler(xRadians, yRadians, zRadians);
 		});
 
 		this.cameraPosition = new THREE.Vector3(0,30,160);
@@ -146,17 +165,6 @@ class App extends React.Component {
 				y: y,
 				z: z
 			});
-
-			if (this.state.inControl) {
-				this.setState({
-					string : "X: "+ x + ", Y: " + y + ", Z: " + z,
-					rotationDegrees : {
-						x : x,
-						y : y,
-						z : z
-					}
-				});
-			}
 		}
 	}
 
@@ -186,13 +194,34 @@ class App extends React.Component {
 
 		let color = new THREE.Color(0xffffff);
 
-		// Box Rotation
-		const xRadians = this.degreeToRadian(this.state.rotationDegrees.x - 90);
-		const yRadians = this.degreeToRadian(this.state.rotationDegrees.y);
-		const zRadians = this.degreeToRadian(this.state.rotationDegrees.z);
+		// Calculate Rotation
 
-		let rotation;
-		rotation = new THREE.Euler(xRadians, yRadians, zRadians);
+		// dot product
+		const dot = this.state.oldRotation.x * this.state.rotationDegrees.x
+			+ this.state.oldRotation.y * this.state.rotationDegrees.y
+			+ this.state.oldRotation.z * this.state.rotationDegrees.z;
+
+		const lengthOld = Math.sqrt(Math.pow(this.state.oldRotation.x, 2) 
+									+ Math.pow(this.state.oldRotation.y, 2)
+									+ Math.pow(this.state.oldRotation.z, 2));
+
+		const lengthNew = Math.sqrt(Math.pow(this.state.rotationDegrees.x, 2) 
+									+ Math.pow(this.state.rotationDegrees.y, 2)
+									+ Math.pow(this.state.rotationDegrees.z, 2));
+
+		const angle = Math.acos(dot / (lengthOld*lengthNew));
+
+		// if (angle > 10) {
+
+
+		// } else {
+		// 	const xRadians = this.degreeToRadian(this.state.rotationDegrees.x - 90);
+		// 	const yRadians = this.degreeToRadian(this.state.rotationDegrees.y);
+		// 	const zRadians = this.degreeToRadian(this.state.rotationDegrees.z);
+
+		// 	this.rotation = new THREE.Euler(xRadians, yRadians, zRadians);
+		// }
+
 
 
 		let welcomeVisible = !this.state.activeClientList.controller;
@@ -207,7 +236,7 @@ class App extends React.Component {
 						<React3 key={1} antialias={true} mainCamera="camera" width={size} height={size} alpha={true} onAnimate={() => this.onAnimate()}>
 							<scene>
 								<perspectiveCamera name="camera" fov={50} aspect={1} near={0.1} far={1000} position={this.cameraPosition} rotation={this.cameraRotation}/>
-								<mesh rotation={rotation}>
+								<mesh rotation={this.rotation}>
 									<boxGeometry ref="phone" width={width} height={height} depth={depth}
 										widthSegments={widthSegments} heightSegments={heightSegments} depthSegments={depthSegments} />
 									<meshLambertMaterial wireframe={wireframe} color={color} vertexColors={THREE.VertexColors}>
