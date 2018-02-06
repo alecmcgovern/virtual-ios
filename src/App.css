@@ -2,10 +2,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    font-family: 'Hind Siliguri', sans-serif;
 }
 
 .orientation {
-    width: 400px;
     height: 50px;
 
     display: flex;

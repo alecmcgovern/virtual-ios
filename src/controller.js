@@ -5,16 +5,6 @@ import './controller.css';
 class Controller extends React.Component {
 	constructor(props) {
 		super(props);
-
-		// const red = this.calculateRed();
-		// const green = this.calculateGreen();
-		const red = 256;
-		const green = 256;
-		const blue = 0;
-
-		this.state = {
-			backgroundColor: "rgb(" + red + "," + green + "," + blue + ")" 
-		}
 	}
 
 	calculateRed() {
@@ -59,12 +49,9 @@ class Controller extends React.Component {
 
 	render() {
 		return (
-			<div ref="background" className="controller-container" style={{backgroundColor:this.state.backgroundColor}}>
+			<div ref="background" className="controller-container">
 				<p>Hold phone flat to start</p>
 				<br />
-				{/*<p>{"X: " + this.props.rotation.x}</p>
-				<p>{"Y: " + this.props.rotation.y}</p>
-				<p>{"Z: " + this.props.rotation.z}</p>*/}
 			</div>
 		);
 	}
