@@ -60,7 +60,13 @@ class App extends React.Component {
 			console.log(activeClientList);
 			this.setState({
 				activeClientList: activeClientList
-			})
+			});
+
+			if (!activeClientList.controller) {
+				this.setState({
+					gameStarted: false
+				})
+			}
 		});
 
 		subscribeToControllingUserResponse((err, response) => {
@@ -209,14 +215,18 @@ class App extends React.Component {
 		const welcomeVisible = !this.state.activeClientList.controller;
 		// let welcomeVisible = false;
 
+		let instructions = "";
+
 		if (!welcomeVisible && !this.state.gameStarted) {
 			this.watchForStartGame();
+			instructions = "Hold your device flat to start";
 		}
 
 		let gameStartedClass = "game-started";
 
 		if (this.state.gameStarted) {
 			gameStartedClass += " show-instructions";
+			instructions = "Game has begun.  Good luck!";
 		}
 
 		return (
@@ -226,7 +236,7 @@ class App extends React.Component {
 				{ !this.state.inControl ? 
 					<div className="main-canvas">
 						<div className="orientation">{"X: " + this.state.rotationDegrees.x + ", " + "Y: " + this.state.rotationDegrees.y + ", " + "Z: " + this.state.rotationDegrees.z}</div>
-						<div className={gameStartedClass}>The game has started</div>
+						<div className={gameStartedClass}>{instructions}</div>
 						<React3 key={1} antialias={true} mainCamera="camera" width={size} height={size} alpha={true}>
 							<scene>
 								<perspectiveCamera name="camera" fov={50} aspect={1} near={0.1} far={1000} position={this.cameraPosition} rotation={this.cameraRotation}/>
