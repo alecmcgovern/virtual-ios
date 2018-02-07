@@ -27,18 +27,18 @@ class App extends React.Component {
 		super(props);
 
 		this.state = {
-			string: '',
 			rotationDegrees: { 
 				x: 0, 
 				y: 0, 
 				z: 0 
 			},
 			activeClientList: {},
-			inControl: false
+			inControl: false,
+			gameStarted: false
 		}
 
 		this.rotation = null;
-		this.rotWorldMatrix = null;
+		this.timeout = null;
 		this.orientationChange = this.orientationChange.bind(this);
 
 		subscribeToClientConnection((err, clientId) => {
@@ -82,7 +82,6 @@ class App extends React.Component {
 		subscribeToOrientation((err, orientation) => {
 			window.requestAnimationFrame(() => {
 				this.setState({
-					string : "X: "+ orientation.x + ", Y: " + orientation.y + ", Z: " + orientation.z,
 					rotationDegrees : {
 						x : orientation.x,
 						y : orientation.y,
@@ -153,6 +152,23 @@ class App extends React.Component {
 		}
 	}
 
+	watchForStartGame() {
+		console.log("watching for device to be flat");
+
+		if (Math.abs(this.state.rotationDegrees.x) < 5 && Math.abs(this.state.rotationDegrees.y) < 5) {
+			if (!this.timeout) {
+				this.timeout = setTimeout(() => {
+					this.setState({
+						gameStarted: true
+					});
+				}, 3000);
+			}
+		} else {
+			clearTimeout(this.timeout);
+			this.timeout = null;
+		}
+	}
+
 	render() {
 		// Canvas size
 		const size = 600;
@@ -169,7 +185,7 @@ class App extends React.Component {
 
 		const color = new THREE.Color(0xffffff);
 
-		// Calculate Rotation
+		// Convert Euler angles to Quaternions
 		const z = this.state.rotationDegrees.z ? THREE.Math.degToRad( this.state.rotationDegrees.z ) : 0; // Z
 		const x = this.state.rotationDegrees.x ? THREE.Math.degToRad( this.state.rotationDegrees.x ) : 0; // X'
 		const y = this.state.rotationDegrees.y ? THREE.Math.degToRad( this.state.rotationDegrees.y ) : 0; // Y''
@@ -188,8 +204,20 @@ class App extends React.Component {
 
 		this.rotation = quaternion;
 
-		let welcomeVisible = !this.state.activeClientList.controller;
+
+		// Set game state
+		const welcomeVisible = !this.state.activeClientList.controller;
 		// let welcomeVisible = false;
+
+		if (!welcomeVisible && !this.state.gameStarted) {
+			this.watchForStartGame();
+		}
+
+		let gameStartedClass = "game-started";
+
+		if (this.state.gameStarted) {
+			gameStartedClass += " show-instructions";
+		}
 
 		return (
 			<div className="app">
@@ -197,7 +225,8 @@ class App extends React.Component {
 
 				{ !this.state.inControl ? 
 					<div className="main-canvas">
-						<div className="orientation">{this.state.string}</div>
+						<div className="orientation">{"X: " + this.state.rotationDegrees.x + ", " + "Y: " + this.state.rotationDegrees.y + ", " + "Z: " + this.state.rotationDegrees.z}</div>
+						<div className={gameStartedClass}>The game has started</div>
 						<React3 key={1} antialias={true} mainCamera="camera" width={size} height={size} alpha={true}>
 							<scene>
 								<perspectiveCamera name="camera" fov={50} aspect={1} near={0.1} far={1000} position={this.cameraPosition} rotation={this.cameraRotation}/>
