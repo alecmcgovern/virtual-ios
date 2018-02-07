@@ -13,7 +13,6 @@ import {
 import React3 from 'react-three-renderer';
 import * as THREE from 'three';
 import CANNON from 'cannon/src/Cannon';
-import Quaternion from 'quaternion';
 
 import Welcome from './welcome.js';
 import Controller from './controller.js';
