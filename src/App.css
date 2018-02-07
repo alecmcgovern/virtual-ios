@@ -14,13 +14,8 @@
     align-items: center;
 }
 
-.game-started {
-    visibility: hidden;
+.instructions {
     background-color: pink;
-}
-
-.show-instructions {
-    visibility: visible;
 }
 
 canvas {

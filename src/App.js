@@ -7,7 +7,9 @@ import {
 	subscribeToControllingUserResponse,
 
 	subscribeToOrientation, 
-	sendOrientation 
+	subscribeToTargetOrientation, 
+	sendOrientation,
+	sendTargetOrientation
 } from './api';
 
 import React3 from 'react-three-renderer';
@@ -32,12 +34,18 @@ class App extends React.Component {
 				y: 0, 
 				z: 0 
 			},
+			targetDegrees: {
+				x: 0,
+				y: 0,
+				z: 0
+			},
 			activeClientList: {},
 			inControl: false,
 			gameStarted: false
 		}
 
 		this.rotation = null;
+		this.randomRotation = null;
 		this.timeout = null;
 		this.orientationChange = this.orientationChange.bind(this);
 
@@ -94,6 +102,16 @@ class App extends React.Component {
 						z : orientation.z
 					}
 				});
+			});
+		});
+
+		subscribeToTargetOrientation((err, orientation) => {
+			this.setState({
+				targetDegrees : {
+					x : orientation.x,
+					y : orientation.y,
+					z : orientation.z
+				}
 			});
 		});
 
@@ -159,19 +177,42 @@ class App extends React.Component {
 	}
 
 	watchForStartGame() {
-		console.log("watching for device to be flat");
-
 		if (Math.abs(this.state.rotationDegrees.x) < 5 && Math.abs(this.state.rotationDegrees.y) < 5) {
 			if (!this.timeout) {
 				this.timeout = setTimeout(() => {
 					this.setState({
-						gameStarted: true
+						gameStarted: true,
+						targetDegrees: {
+							x: (Math.random() * 180 - 90).toFixed(0),
+							y: (Math.random() * 180 - 90).toFixed(0),
+							z: (Math.random() * 360).toFixed(0)
+						}
 					});
 				}, 3000);
 			}
 		} else {
 			clearTimeout(this.timeout);
 			this.timeout = null;
+		}
+	}
+
+	watchForAngleAlignment() {
+		if (Math.abs(Math.abs(this.state.rotationDegrees.x) - Math.abs(this.state.targetDegrees.x)) < 5
+			&& Math.abs(Math.abs(this.state.rotationDegrees.y) - Math.abs(this.state.targetDegrees.y)) < 5
+			&& Math.abs(Math.abs(this.state.rotationDegrees.z) - Math.abs(this.state.targetDegrees.z)) < 5) {
+
+			if (!this.randomTimeout) {
+				this.randomTimeout = setTimeout(() => {
+					this.setState({
+						targetDegrees: {
+							x: (Math.random() * 180 - 90).toFixed(0),
+							y: (Math.random() * 180 - 90).toFixed(0),
+							z: (Math.random() * 360).toFixed(0)
+						}
+					})
+				}, 3000);
+			}
+
 		}
 	}
 
@@ -210,8 +251,21 @@ class App extends React.Component {
 
 		this.rotation = quaternion;
 
+		// Random alignment
+		if (this.state.targetDegrees.x && this.state.targetDegrees.y && this.state.targetDegrees.z) {
+			const alpha = this.state.targetDegrees.z ? THREE.Math.degToRad( this.state.targetDegrees.z ) : 0; // Z
+			const beta = this.state.targetDegrees.x ? THREE.Math.degToRad( this.state.targetDegrees.x ) : 0; // X'
+			const gamma = this.state.targetDegrees.y ? THREE.Math.degToRad( this.state.targetDegrees.y ) : 0; // Y''
+			
+			euler.set( beta, alpha, - gamma, 'YXZ' );
+			let randomQuaternion = new THREE.Quaternion();
+			randomQuaternion.setFromEuler( euler );
+			randomQuaternion.multiply( q1 );
+			randomQuaternion.multiply( q0.setFromAxisAngle( zee, 0 ) );
+			this.randomRotation = randomQuaternion;
+		}
 
-		// Set game state
+		// Set up and control game state
 		const welcomeVisible = !this.state.activeClientList.controller;
 		// let welcomeVisible = false;
 
@@ -222,11 +276,9 @@ class App extends React.Component {
 			instructions = "Hold your device flat to start";
 		}
 
-		let gameStartedClass = "game-started";
-
 		if (this.state.gameStarted) {
-			gameStartedClass += " show-instructions";
 			instructions = "Game has begun.  Good luck!";
+			this.watchForAngleAlignment();
 		}
 
 		return (
@@ -236,7 +288,7 @@ class App extends React.Component {
 				{ !this.state.inControl ? 
 					<div className="main-canvas">
 						<div className="orientation">{"X: " + this.state.rotationDegrees.x + ", " + "Y: " + this.state.rotationDegrees.y + ", " + "Z: " + this.state.rotationDegrees.z}</div>
-						<div className={gameStartedClass}>{instructions}</div>
+						<div className="instructions">{instructions}</div>
 						<React3 key={1} antialias={true} mainCamera="camera" width={size} height={size} alpha={true}>
 							<scene>
 								<perspectiveCamera name="camera" fov={50} aspect={1} near={0.1} far={1000} position={this.cameraPosition} rotation={this.cameraRotation}/>
@@ -246,6 +298,16 @@ class App extends React.Component {
 									<meshLambertMaterial wireframe={wireframe} color={color} vertexColors={THREE.VertexColors}>
 									</meshLambertMaterial>
 								</mesh>
+								{ this.gameStarted ? 
+									<mesh quaternion={this.randomRotation}>
+										<boxGeometry width={width} height={height} depth={depth}
+											widthSegments={widthSegments} heightSegments={heightSegments} depthSegments={depthSegments} />
+										<meshLambertMaterial wireframe={true} color={color} vertexColors={THREE.VertexColors}>
+										</meshLambertMaterial>
+									</mesh>
+									:
+									null
+								}
 								<object3D>
 									<ambientLight/>
 								</object3D>

@@ -63,8 +63,13 @@ io.on('connection', function(client) {
 	// send device orientation
 	client.on('sendOrientation', (orientation) => {
 		if (controllingUserId === client.id) {
-			console.log("client sent an orientation: ");
 			io.emit('orientationReceived', orientation);
+		}
+	});
+
+	client.on('sendTargetOrientation', (orientation) => {
+		if (controllingUserId === client.id) {
+			io.emit('targetOrientationReceived', targetOrientation);
 		}
 	});
 });

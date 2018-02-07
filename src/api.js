@@ -31,10 +31,17 @@ function subscribeToOrientation(callback) {
 	socket.on('orientationReceived', orientationReceived => callback(null, orientationReceived));
 }
 
+function subscribeToTargetOrientation(callback) {
+	socket.on('targetOrientationReceived', targetOrientationReceived => callback(null, targetOrientationReceived));
+}
+
 function sendOrientation(orientation) {
 	socket.emit('sendOrientation', orientation);
 }
 
+function sendTargetOrientation(targetOrientation) {
+	socket.emit('sendTargetOrientation', targetOrientation);
+}
 
 export { 
 	sendDeviceType, 
@@ -43,7 +50,9 @@ export {
 	subscribeToClientDisconnection,
 	subscribeToControllingUserResponse,
 
-	subscribeToOrientation, 
-	sendOrientation 
+	subscribeToOrientation,
+	subscribeToTargetOrientation, 
+	sendOrientation,
+	sendTargetOrientation  
 };
 
