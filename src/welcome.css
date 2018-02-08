@@ -13,10 +13,32 @@
     pointer-events: none;
 }
 
+.welcome-instructions {
+    animation: 1.2s linear pulse ;
+    animation-iteration-count:infinite;
+    transition: background-color 0.5s ease-in-out;
+    border-radius: 15px;
+    padding: 0 10px;
+}
+
 .show {
 	opacity: 1;
 }
 
 .qr-code {
     width: 600px;
+}
+
+@keyframes pulse {
+    0% {
+        background-color: white;
+    }
+
+    50% {
+        background-color: pink;
+    }
+
+    100% {
+        background-color: white;
+    }
 }

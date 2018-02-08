@@ -14,8 +14,6 @@ import {
 
 import React3 from 'react-three-renderer';
 import * as THREE from 'three';
-import CANNON from 'cannon/src/Cannon';
-
 import Welcome from './welcome.js';
 import Controller from './controller.js';
 
@@ -116,7 +114,7 @@ class App extends React.Component {
 			});
 		});
 
-		this.cameraPosition = new THREE.Vector3(0,30,160);
+		this.cameraPosition = new THREE.Vector3(0,20,180);
 		this.cameraRotation = new THREE.Euler(THREE.Math.degToRad(0),THREE.Math.degToRad(0),THREE.Math.degToRad(0));
 
 		this.lightPosition = new THREE.Vector3(20, 20, 0);
@@ -129,10 +127,10 @@ class App extends React.Component {
 		}
 
 		// RIGHT EDGE -GREEN
-		this.refs.phone.faces[ 0 ].color.setHex( 0x10ff00 );
-		this.refs.phone.faces[ 1 ].color.setHex( 0x10ff00 );
-		this.refs.angle.faces[ 0 ].color.setHex( 0x10ff00 );
-		this.refs.angle.faces[ 1 ].color.setHex( 0x10ff00 );
+		this.refs.phone.faces[ 0 ].color.setHex( 0x007a1a );
+		this.refs.phone.faces[ 1 ].color.setHex( 0x007a1a );
+		this.refs.angle.faces[ 0 ].color.setHex( 0x007a1a );
+		this.refs.angle.faces[ 1 ].color.setHex( 0x007a1a );
 
 		// LEFT EDGE - YELLOW
 		this.refs.phone.faces[ 2 ].color.setHex( 0xffff00 );
@@ -274,8 +272,8 @@ class App extends React.Component {
 
 
 		// Set up and control game state
-		const welcomeVisible = !this.state.activeClientList.controller;
-		// let welcomeVisible = false;
+		// const welcomeVisible = !this.state.activeClientList.controller;
+		let welcomeVisible = false;
 
 		let instructions = "";
 
@@ -287,7 +285,7 @@ class App extends React.Component {
 		}
 
 		if (this.state.gameStarted) {
-			instructions = "Game has begun.  Good luck!";
+			instructions = "Match your device's orientation to the one shown";
 
 			if (this.state.inControl) {
 				this.watchForAngleAlignment();
@@ -321,8 +319,8 @@ class App extends React.Component {
 
 				{ !this.state.inControl ? 
 					<div className="main-canvas">
-						<div className="orientation">{"X: " + this.state.rotationDegrees.x + ", " + "Y: " + this.state.rotationDegrees.y + ", " + "Z: " + this.state.rotationDegrees.z}</div>
 						<div className={instructionsClass}>{instructions}</div>
+						<div className="orientation">{"X: " + this.state.rotationDegrees.x + ", " + "Y: " + this.state.rotationDegrees.y + ", " + "Z: " + this.state.rotationDegrees.z}</div>
 						<React3 key={1} antialias={true} mainCamera="camera" width={size} height={size} alpha={true}>
 							<scene>
 								<perspectiveCamera name="camera" fov={50} aspect={1} near={0.1} far={1000} position={this.cameraPosition} rotation={this.cameraRotation}/>

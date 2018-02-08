@@ -9,14 +9,13 @@ class Welcome extends React.Component {
 	render() {
 		let welcomeContainerClass = "welcome-container";
 
-		// if (false) {
 		if (this.props.visible) {
 			welcomeContainerClass += " show";
 		}
 
 		return (
 			<div className={welcomeContainerClass}>
-				<div className="instructions">Please connect an iOS device</div>
+				<div className="welcome-instructions">Please connect an iOS device</div>
 				<img className="qr-code" src={qrCode} alt="" />
 			</div>
 		);
