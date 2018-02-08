@@ -48,13 +48,17 @@ io.on('connection', function(client) {
 	});
 
 	client.on('sendDeviceType', (deviceType) => {
-		if (deviceType === "iOS" && controllingUserId === null) {
-			controllingUserId = client.id;
+		if (deviceType === "iOS" || deviceType="Android") {
+			if (controllingUserId === null) {
+				controllingUserId = client.id;
 
-			activeClients.controller = controllingUserId;
-			io.emit('activeClientList', activeClients);
+				activeClients.controller = controllingUserId;
+				io.emit('activeClientList', activeClients);
 
-			client.emit('controllingUserResponse', true);
+				client.emit('controllingUserResponse', true);
+			} else {
+				client.emit('controllingUserResponse', false);
+			}
 		} else {
 			client.emit('controllingUserResponse', false);
 		}

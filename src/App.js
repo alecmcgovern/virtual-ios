@@ -52,9 +52,17 @@ class App extends React.Component {
 
 			let iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
+
 			if (iOS) {
 				sendDeviceType("iOS");
+			} else {
+				let userAgent = navigator.userAgent || navigator.vendor;
+
+				if (/android/i.test(userAgent)) {
+			    	sendDeviceType("Android");
+				}
 			}
+
 		});
 
 		subscribeToClientDisconnection((err, clientId) => {
