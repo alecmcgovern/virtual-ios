@@ -186,7 +186,7 @@ class App extends React.Component {
 			if (!this.timeout) {
 				this.timeout = setTimeout(() => {
 					this.setRandomAngle();
-				}, 3000);
+				}, 2000);
 			}
 		} else {
 			clearTimeout(this.timeout);
@@ -202,7 +202,7 @@ class App extends React.Component {
 			if (!this.randomTimeout) {
 				this.randomTimeout = setTimeout(() => {
 					this.setRandomAngle();
-				}, 1000);
+				}, 600);
 			}
 		} else {
 			clearTimeout(this.randomTimeout);
