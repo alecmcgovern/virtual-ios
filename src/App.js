@@ -180,13 +180,21 @@ class App extends React.Component {
 		if (Math.abs(this.state.rotationDegrees.x) < 5 && Math.abs(this.state.rotationDegrees.y) < 5) {
 			if (!this.timeout) {
 				this.timeout = setTimeout(() => {
+					const x = (Math.random() * 180 - 90).toFixed(0);
+					const y = (Math.random() * 180 - 90).toFixed(0);
+					const z = (Math.random() * 360).toFixed(0);
 					this.setState({
 						gameStarted: true,
 						targetDegrees: {
-							x: (Math.random() * 180 - 90).toFixed(0),
-							y: (Math.random() * 180 - 90).toFixed(0),
-							z: (Math.random() * 360).toFixed(0)
+							x: x,
+							y: y,
+							z: z
 						}
+					});
+					sendTargetOrientation({ 
+						x: x,
+						y: y,
+						z: z
 					});
 				}, 3000);
 			}
@@ -251,19 +259,6 @@ class App extends React.Component {
 
 		this.rotation = quaternion;
 
-		// Random alignment
-		if (this.state.targetDegrees.x && this.state.targetDegrees.y && this.state.targetDegrees.z) {
-			const alpha = this.state.targetDegrees.z ? THREE.Math.degToRad( this.state.targetDegrees.z ) : 0; // Z
-			const beta = this.state.targetDegrees.x ? THREE.Math.degToRad( this.state.targetDegrees.x ) : 0; // X'
-			const gamma = this.state.targetDegrees.y ? THREE.Math.degToRad( this.state.targetDegrees.y ) : 0; // Y''
-			
-			euler.set( beta, alpha, - gamma, 'YXZ' );
-			let randomQuaternion = new THREE.Quaternion();
-			randomQuaternion.setFromEuler( euler );
-			randomQuaternion.multiply( q1 );
-			randomQuaternion.multiply( q0.setFromAxisAngle( zee, 0 ) );
-			this.randomRotation = randomQuaternion;
-		}
 
 		// Set up and control game state
 		const welcomeVisible = !this.state.activeClientList.controller;
@@ -279,6 +274,17 @@ class App extends React.Component {
 		if (this.state.gameStarted) {
 			instructions = "Game has begun.  Good luck!";
 			this.watchForAngleAlignment();
+
+			const alpha = this.state.targetDegrees.z ? THREE.Math.degToRad( this.state.targetDegrees.z ) : 0; // Z
+			const beta = this.state.targetDegrees.x ? THREE.Math.degToRad( this.state.targetDegrees.x ) : 0; // X'
+			const gamma = this.state.targetDegrees.y ? THREE.Math.degToRad( this.state.targetDegrees.y ) : 0; // Y''
+			
+			euler.set( beta, alpha, - gamma, 'YXZ' );
+			let randomQuaternion = new THREE.Quaternion();
+			randomQuaternion.setFromEuler( euler );
+			randomQuaternion.multiply( q1 );
+			randomQuaternion.multiply( q0.setFromAxisAngle( zee, 0 ) );
+			this.randomRotation = randomQuaternion;
 		}
 
 		return (
