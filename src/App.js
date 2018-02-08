@@ -304,15 +304,15 @@ class App extends React.Component {
 			randomQuaternion.multiply( q0.setFromAxisAngle( zee, 0 ) );
 			this.randomRotation = randomQuaternion;
 		} else {
-			this.randomRotation = new THREE.Quaternion();
+			this.randomRotation = this.rotation;
 		}
 
 		let instructionsClass = "instructions";
-		let opacity = 0;
+		let opacityValue = 0;
 
 		if (this.state.gameStarted) {
 			instructionsClass += " green-background";
-			opacity = 0.3;
+			opacityValue = 0.3;
 		}
 
 		return (
@@ -335,7 +335,7 @@ class App extends React.Component {
 								<mesh quaternion={this.randomRotation}>
 									<boxGeometry ref="angle" width={width} height={height} depth={depth}
 										widthSegments={widthSegments} heightSegments={heightSegments} depthSegments={depthSegments} />
-									<meshLambertMaterial wireframe={wireframe} color={color} vertexColors={THREE.VertexColors} transparent={true} opacity={opacity}>
+									<meshLambertMaterial wireframe={wireframe} color={color} vertexColors={THREE.VertexColors} transparent={true} opacity={opacityValue}>
 									</meshLambertMaterial>
 								</mesh>
 								}
