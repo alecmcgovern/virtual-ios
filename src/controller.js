@@ -10,7 +10,7 @@ class Controller extends React.Component {
 	render() {
 		return (
 			<div ref="background" className="controller-container">
-				<p>{this.props.message}</p>
+				<p>{this.props.string}</p>
 				<br />
 			</div>
 		);
