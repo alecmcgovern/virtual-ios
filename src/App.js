@@ -182,11 +182,11 @@ class App extends React.Component {
 	}
 
 	watchForStartGame() {
-		if (Math.abs(this.state.rotationDegrees.x) < 5 && Math.abs(this.state.rotationDegrees.y) < 5) {
+		if (Math.abs(this.state.rotationDegrees.x) < 8 && Math.abs(this.state.rotationDegrees.y) < 8) {
 			if (!this.timeout) {
 				this.timeout = setTimeout(() => {
 					this.setRandomAngle();
-				}, 2000);
+				}, 1000);
 			}
 		} else {
 			clearTimeout(this.timeout);
