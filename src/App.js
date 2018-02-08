@@ -268,7 +268,7 @@ class App extends React.Component {
 
 		// Set up and control game state
 		const welcomeVisible = !this.state.activeClientList.controller;
-		// let welcomeVisible = false;
+		// let welcomeVisible = false; // TESTING ONLY
 
 		let instructions = "";
 
@@ -280,7 +280,7 @@ class App extends React.Component {
 		}
 
 		if (this.state.gameStarted) {
-			instructions = "Match your device's orientation to the one shown";
+			instructions = "Match your orientation to the one shown";
 
 			if (this.state.inControl) {
 				this.watchForAngleAlignment();
@@ -356,7 +356,7 @@ class App extends React.Component {
 
 					:
 
-					<Controller rotation={this.state.rotationDegrees} />
+					<Controller string={instructions} />
 				}
 
 			</div>

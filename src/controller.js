@@ -7,50 +7,10 @@ class Controller extends React.Component {
 		super(props);
 	}
 
-	calculateRed() {
-		const xOffset = Math.abs(this.props.rotation.x / 90);
-		const yOffset = Math.abs(this.props.rotation.y / 90);
-
-		const maxOffset = Math.max(xOffset, yOffset);
-
-		if (maxOffset > 0.5) {
-			return 256;
-		} else {
-			let red = maxOffset*2*256;
-			return red.toFixed(0);
-		}
-	}
-
-	calculateGreen() {
-		const xOffset = Math.abs(this.props.rotation.x / 90);
-		const yOffset = Math.abs(this.props.rotation.y / 90);
-
-		const maxOffset = Math.max(xOffset, yOffset);
-
-		if (maxOffset < 0.5) {
-			return 256;
-		} else if (maxOffset > 1) {
-			return 0;
-		} else {
-			let green = (1 - maxOffset)*2 * 256;
-			return green.toFixed(0);
-		}
-	}
-
-	componentDidUpdate() {
-		// const red = this.calculateRed();
-		// const green = this.calculateGreen();
-		// const blue = 0;
-
-		// this.setState({
-		// 	backgroundColor: "rgb(" + red + "," + green + "," + blue + ")" 
-		// });
-	}
-
 	render() {
 		return (
 			<div ref="background" className="controller-container">
-				<p>Hold phone flat to start</p>
+				<p>{this.props.message}</p>
 				<br />
 			</div>
 		);
