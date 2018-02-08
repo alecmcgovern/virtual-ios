@@ -132,44 +132,51 @@ class App extends React.Component {
 		this.refs.phone.faces[ 0 ].color.setHex( 0x10ff00 );
 		this.refs.phone.faces[ 1 ].color.setHex( 0x10ff00 );
 
-		this.refs.angle.faces[ 0 ].color.setHex( 0x10ff00 );
-		this.refs.angle.faces[ 1 ].color.setHex( 0x10ff00 );
-
 		// LEFT EDGE - YELLOW
 		this.refs.phone.faces[ 2 ].color.setHex( 0xffff00 );
 		this.refs.phone.faces[ 3 ].color.setHex( 0xffff00 );
-
-		this.refs.angle.faces[ 2 ].color.setHex( 0xffff00 );
-		this.refs.angle.faces[ 3 ].color.setHex( 0xffff00 );
 
 		// BACK EDGE - ORANGE
 		this.refs.phone.faces[ 4 ].color.setHex( 0xdf9000 );
 		this.refs.phone.faces[ 5 ].color.setHex( 0xdf9000 );
 
-		this.refs.angle.faces[ 4 ].color.setHex( 0xdf9000 );
-		this.refs.angle.faces[ 5 ].color.setHex( 0xdf9000 );
-
 		// FRONT EDGE - RED
 		this.refs.phone.faces[ 6 ].color.setHex( 0xff0000 );
 		this.refs.phone.faces[ 7 ].color.setHex( 0xff0000 );
-
-		this.refs.angle.faces[ 6 ].color.setHex( 0xff0000 );
-		this.refs.angle.faces[ 7 ].color.setHex( 0xff0000 );
 
 		// TOP - BLUE
 		this.refs.phone.faces[ 8 ].color.setHex( 0x120196 );
 		this.refs.phone.faces[ 9 ].color.setHex( 0x120196 );
 
-		this.refs.angle.faces[ 8 ].color.setHex( 0x120196 );
-		this.refs.angle.faces[ 9 ].color.setHex( 0x120196 );
-
 		// BOTTOM - PURPLE
 		this.refs.phone.faces[ 10 ].color.setHex( 0x860079 );
 		this.refs.phone.faces[ 11 ].color.setHex( 0x860079 );
 
-		this.refs.angle.faces[ 10 ].color.setHex( 0x860079 );
-		this.refs.angle.faces[ 11 ].color.setHex( 0x860079 );
+		if (this.refs.angle) {
+			// RIGHT EDGE -GREEN
+			this.refs.angle.faces[ 0 ].color.setHex( 0x10ff00 );
+			this.refs.angle.faces[ 1 ].color.setHex( 0x10ff00 );
 
+			// LEFT EDGE - YELLOW
+			this.refs.angle.faces[ 2 ].color.setHex( 0xffff00 );
+			this.refs.angle.faces[ 3 ].color.setHex( 0xffff00 );
+
+			// BACK EDGE - ORANGE
+			this.refs.angle.faces[ 4 ].color.setHex( 0xdf9000 );
+			this.refs.angle.faces[ 5 ].color.setHex( 0xdf9000 );
+
+			// FRONT EDGE - RED
+			this.refs.angle.faces[ 6 ].color.setHex( 0xff0000 );
+			this.refs.angle.faces[ 7 ].color.setHex( 0xff0000 );
+
+			// TOP - BLUE
+			this.refs.angle.faces[ 8 ].color.setHex( 0x120196 );
+			this.refs.angle.faces[ 9 ].color.setHex( 0x120196 );
+			
+			// BOTTOM - PURPLE
+			this.refs.angle.faces[ 10 ].color.setHex( 0x860079 );
+			this.refs.angle.faces[ 11 ].color.setHex( 0x860079 );
+		}
 
 		// TESTING PURPOSES ONLY
 		// this.setState({
