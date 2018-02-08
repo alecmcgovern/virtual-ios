@@ -338,7 +338,6 @@ class App extends React.Component {
 									<meshLambertMaterial wireframe={wireframe} color={color} vertexColors={THREE.VertexColors} transparent={true} opacity={opacityValue}>
 									</meshLambertMaterial>
 								</mesh>
-								}
 								<object3D>
 									<ambientLight/>
 								</object3D>
