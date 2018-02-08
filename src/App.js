@@ -309,7 +309,7 @@ class App extends React.Component {
 									<meshLambertMaterial wireframe={wireframe} color={color} vertexColors={THREE.VertexColors}>
 									</meshLambertMaterial>
 								</mesh>
-								{ this.gameStarted ? 
+								{ this.state.gameStarted ? 
 									<mesh quaternion={this.randomRotation}>
 										<boxGeometry width={width} height={height} depth={depth}
 											widthSegments={widthSegments} heightSegments={heightSegments} depthSegments={depthSegments} />
