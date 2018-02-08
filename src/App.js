@@ -107,6 +107,7 @@ class App extends React.Component {
 
 		subscribeToTargetOrientation((err, orientation) => {
 			this.setState({
+				gameStarted: true,
 				targetDegrees : {
 					x : orientation.x,
 					y : orientation.y,
@@ -180,22 +181,7 @@ class App extends React.Component {
 		if (Math.abs(this.state.rotationDegrees.x) < 5 && Math.abs(this.state.rotationDegrees.y) < 5) {
 			if (!this.timeout) {
 				this.timeout = setTimeout(() => {
-					const x = (Math.random() * 180 - 90).toFixed(0);
-					const y = (Math.random() * 180 - 90).toFixed(0);
-					const z = (Math.random() * 360).toFixed(0);
-					this.setState({
-						gameStarted: true,
-						targetDegrees: {
-							x: x,
-							y: y,
-							z: z
-						}
-					});
-					sendTargetOrientation({ 
-						x: x,
-						y: y,
-						z: z
-					});
+					this.setRandomAngle();
 				}, 3000);
 			}
 		} else {
@@ -211,17 +197,31 @@ class App extends React.Component {
 
 			if (!this.randomTimeout) {
 				this.randomTimeout = setTimeout(() => {
-					this.setState({
-						targetDegrees: {
-							x: (Math.random() * 180 - 90).toFixed(0),
-							y: (Math.random() * 180 - 90).toFixed(0),
-							z: (Math.random() * 360).toFixed(0)
-						}
-					})
+					this.setRandomAngle();
 				}, 3000);
 			}
 
 		}
+	}
+
+	setRandomAngle() {
+		const x = (Math.random() * 180 - 90).toFixed(0);
+		const y = (Math.random() * 180 - 90).toFixed(0);
+		const z = (Math.random() * 360).toFixed(0);
+		this.setState({
+			gameStarted: true,
+			targetDegrees: {
+				x: x,
+				y: y,
+				z: z
+			}
+		});
+
+		sendTargetOrientation({ 
+			x: x,
+			y: y,
+			z: z
+		});
 	}
 
 	render() {
@@ -267,13 +267,18 @@ class App extends React.Component {
 		let instructions = "";
 
 		if (!welcomeVisible && !this.state.gameStarted) {
-			this.watchForStartGame();
+			if (this.state.inControl) {
+				this.watchForStartGame();
+			}
 			instructions = "Hold your device flat to start";
 		}
 
 		if (this.state.gameStarted) {
 			instructions = "Game has begun.  Good luck!";
-			this.watchForAngleAlignment();
+
+			if (this.state.inControl) {
+				this.watchForAngleAlignment();
+			}
 
 			const alpha = this.state.targetDegrees.z ? THREE.Math.degToRad( this.state.targetDegrees.z ) : 0; // Z
 			const beta = this.state.targetDegrees.x ? THREE.Math.degToRad( this.state.targetDegrees.x ) : 0; // X'
