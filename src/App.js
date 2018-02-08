@@ -198,9 +198,11 @@ class App extends React.Component {
 			if (!this.randomTimeout) {
 				this.randomTimeout = setTimeout(() => {
 					this.setRandomAngle();
-				}, 3000);
+				}, 1000);
 			}
-
+		} else {
+			clearTimeout(this.randomTimeout);
+			this.randomTimeout = null;
 		}
 	}
 
@@ -292,6 +294,12 @@ class App extends React.Component {
 			this.randomRotation = randomQuaternion;
 		}
 
+		let instructionsClass = "instructions";
+
+		if (this.state.gameStarted) {
+			instructionsClass += " green-background";
+		}
+
 		return (
 			<div className="app">
 				<Welcome visible={welcomeVisible} />
@@ -299,7 +307,7 @@ class App extends React.Component {
 				{ !this.state.inControl ? 
 					<div className="main-canvas">
 						<div className="orientation">{"X: " + this.state.rotationDegrees.x + ", " + "Y: " + this.state.rotationDegrees.y + ", " + "Z: " + this.state.rotationDegrees.z}</div>
-						<div className="instructions">{instructions}</div>
+						<div className={instructionsClass}>{instructions}</div>
 						<React3 key={1} antialias={true} mainCamera="camera" width={size} height={size} alpha={true}>
 							<scene>
 								<perspectiveCamera name="camera" fov={50} aspect={1} near={0.1} far={1000} position={this.cameraPosition} rotation={this.cameraRotation}/>
