@@ -48,7 +48,7 @@ io.on('connection', function(client) {
 	});
 
 	client.on('sendDeviceType', (deviceType) => {
-		if (deviceType === "iOS" || deviceType="Android") {
+		if (deviceType === "iOS" || deviceType === "Android") {
 			if (controllingUserId === null) {
 				controllingUserId = client.id;
 
