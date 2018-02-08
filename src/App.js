@@ -191,9 +191,9 @@ class App extends React.Component {
 	}
 
 	watchForAngleAlignment() {
-		if (Math.abs(Math.abs(this.state.rotationDegrees.x) - Math.abs(this.state.targetDegrees.x)) < 5
-			&& Math.abs(Math.abs(this.state.rotationDegrees.y) - Math.abs(this.state.targetDegrees.y)) < 5
-			&& Math.abs(Math.abs(this.state.rotationDegrees.z) - Math.abs(this.state.targetDegrees.z)) < 5) {
+		if (Math.abs(Math.abs(this.state.rotationDegrees.x) - Math.abs(this.state.targetDegrees.x)) < 10
+			&& Math.abs(Math.abs(this.state.rotationDegrees.y) - Math.abs(this.state.targetDegrees.y)) < 10
+			&& Math.abs(Math.abs(this.state.rotationDegrees.z) - Math.abs(this.state.targetDegrees.z)) < 10) {
 
 			if (!this.randomTimeout) {
 				this.randomTimeout = setTimeout(() => {
