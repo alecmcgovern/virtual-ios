@@ -15,7 +15,7 @@ class Welcome extends React.Component {
 
 		return (
 			<div className={welcomeContainerClass}>
-				<div className="welcome-instructions">Please connect an iOS device</div>
+				<div className="welcome-instructions">Please connect a mobile device</div>
 				<img className="qr-code" src={qrCode} alt="" />
 			</div>
 		);
