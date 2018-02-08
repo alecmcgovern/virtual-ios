@@ -19,6 +19,7 @@
 }
 
 .instructions {
+    background-color: white;
     animation: 1.2s linear pulse ;
     animation-iteration-count:infinite;
     transition: background-color 0.5s ease-in-out;
@@ -29,7 +30,7 @@
 }
 
 .green-background {
-    background-color: green;
+    /*background-color: green;*/
     animation: none;
 }
 

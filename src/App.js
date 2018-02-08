@@ -161,11 +161,6 @@ class App extends React.Component {
 		this.refs.phone.faces[ 11 ].color.setHex( 0x860079 );
 		this.refs.angle.faces[ 10 ].color.setHex( 0x860079 );
 		this.refs.angle.faces[ 11 ].color.setHex( 0x860079 );
-
-		// TESTING PURPOSES ONLY
-		// this.setState({
-		// 	inControl: true
-		// })
 	}
 
 	componentWillUnmount() {
@@ -272,8 +267,8 @@ class App extends React.Component {
 
 
 		// Set up and control game state
-		// const welcomeVisible = !this.state.activeClientList.controller;
-		let welcomeVisible = false;
+		const welcomeVisible = !this.state.activeClientList.controller;
+		// let welcomeVisible = false;
 
 		let instructions = "";
 
