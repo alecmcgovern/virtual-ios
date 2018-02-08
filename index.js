@@ -67,7 +67,7 @@ io.on('connection', function(client) {
 		}
 	});
 
-	client.on('sendTargetOrientation', (orientation) => {
+	client.on('sendTargetOrientation', (targetOrientation) => {
 		if (controllingUserId === client.id) {
 			io.emit('targetOrientationReceived', targetOrientation);
 		}
