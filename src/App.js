@@ -313,7 +313,7 @@ class App extends React.Component {
 
 		if (this.state.gameStarted) {
 			instructionsClass += " green-background";
-			opacityValue = 0.3;
+			opacityValue = 0.5;
 		}
 
 		return (
