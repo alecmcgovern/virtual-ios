@@ -168,7 +168,6 @@ class App extends React.Component {
 	}
 
 	orientationChange(event) {
-		alert("orientation change");
 		if (event.alpha && event.beta && event.gamma) {
 			const x = event.beta.toFixed(0);
 			const y = event.gamma.toFixed(0);
