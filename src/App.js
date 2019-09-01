@@ -17,8 +17,6 @@ import * as THREE from 'three';
 import Welcome from './welcome.js';
 import Controller from './controller.js';
 
-import phoneScreen from './images/phoneScreen.png';
-
 import './App.css';
 
 class App extends React.Component {
@@ -28,7 +26,7 @@ class App extends React.Component {
 
 		this.state = {
 			rotationDegrees: { 
-				x: 0, 
+				x: 90, 
 				y: 0, 
 				z: 0 
 			},
@@ -48,21 +46,21 @@ class App extends React.Component {
 		this.orientationChange = this.orientationChange.bind(this);
 
 		subscribeToClientConnection((err, clientId) => {
-			console.log(clientId + " has connected");
-
-			let iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-
+			let iOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
 
 			if (iOS) {
+				console.log("IOS user connected");
 				sendDeviceType("iOS");
 			} else {
 				let userAgent = navigator.userAgent || navigator.vendor;
 
 				if (/android/i.test(userAgent)) {
+					console.log("Android user connected");
 			    	sendDeviceType("Android");
 				}
 			}
 
+			console.log(clientId + " has connected");
 		});
 
 		subscribeToClientDisconnection((err, clientId) => {
@@ -86,15 +84,9 @@ class App extends React.Component {
 		subscribeToControllingUserResponse((err, response) => {
 			if (!this.state.inControl) {
 				if (response) {
-					this.setState({
-						inControl: true
-					});
-					console.log("you are the controlling user");
+					this.setState({ inControl: true });
 				} else {
-					this.setState({
-						inControl: false
-					});
-					console.log("you are not the controlling user");
+					this.setState({ inControl: false });
 				}
 			}
 		});
@@ -131,7 +123,7 @@ class App extends React.Component {
 
 	componentDidMount() {
 		if(window.DeviceOrientationEvent) {
-			window.addEventListener("deviceorientation", this.orientationChange);
+			window.addEventListener("deviceorientation", this.orientationChange, true);
 		}
 
 		// RIGHT EDGE -GREEN
@@ -176,6 +168,7 @@ class App extends React.Component {
 	}
 
 	orientationChange(event) {
+		alert("orientation change");
 		if (event.alpha && event.beta && event.gamma) {
 			const x = event.beta.toFixed(0);
 			const y = event.gamma.toFixed(0);
@@ -239,6 +232,7 @@ class App extends React.Component {
 	}
 
 	render() {
+		const { rotationDegrees, targetDegrees, activeClientList, gameStarted, inControl } = this.state;
 		// Canvas size
 		const size = 600;
 
@@ -255,9 +249,9 @@ class App extends React.Component {
 		const color = new THREE.Color(0xffffff);
 
 		// Convert Euler angles to Quaternions
-		const z = this.state.rotationDegrees.z ? THREE.Math.degToRad( this.state.rotationDegrees.z ) : 0; // Z
-		const x = this.state.rotationDegrees.x ? THREE.Math.degToRad( this.state.rotationDegrees.x ) : 0; // X'
-		const y = this.state.rotationDegrees.y ? THREE.Math.degToRad( this.state.rotationDegrees.y ) : 0; // Y''
+		const z = rotationDegrees.z ? THREE.Math.degToRad( rotationDegrees.z ) : 0; // Z
+		const x = rotationDegrees.x ? THREE.Math.degToRad( rotationDegrees.x ) : 0; // X'
+		const y = rotationDegrees.y ? THREE.Math.degToRad( rotationDegrees.y ) : 0; // Y''
 
 		let zee = new THREE.Vector3( 0, 0, 1 );
 		let euler = new THREE.Euler();
@@ -275,28 +269,27 @@ class App extends React.Component {
 
 
 		// Set up and control game state
-		const welcomeVisible = !this.state.activeClientList.controller;
-		// let welcomeVisible = false; // TESTING ONLY
+		const welcomeVisible = !activeClientList.controller;
 
 		let instructions = "";
 
-		if (!welcomeVisible && !this.state.gameStarted) {
-			if (this.state.inControl) {
+		if (!welcomeVisible && !gameStarted) {
+			if (inControl) {
 				this.watchForStartGame();
 			}
 			instructions = "Hold your device flat to start";
 		}
 
-		if (this.state.gameStarted) {
+		if (gameStarted) {
 			instructions = "Match your orientation to the one shown";
 
-			if (this.state.inControl) {
+			if (inControl) {
 				this.watchForAngleAlignment();
 			}
 
-			const alpha = this.state.targetDegrees.z ? THREE.Math.degToRad( this.state.targetDegrees.z ) : 0; // Z
-			const beta = this.state.targetDegrees.x ? THREE.Math.degToRad( this.state.targetDegrees.x ) : 0; // X'
-			const gamma = this.state.targetDegrees.y ? THREE.Math.degToRad( this.state.targetDegrees.y ) : 0; // Y''
+			const alpha = targetDegrees.z ? THREE.Math.degToRad( targetDegrees.z ) : 0; // Z
+			const beta = targetDegrees.x ? THREE.Math.degToRad( targetDegrees.x ) : 0; // X'
+			const gamma = targetDegrees.y ? THREE.Math.degToRad( targetDegrees.y ) : 0; // Y''
 			
 			euler.set( beta, alpha, - gamma, 'YXZ' );
 			let randomQuaternion = new THREE.Quaternion();
@@ -311,7 +304,7 @@ class App extends React.Component {
 		let instructionsClass = "instructions";
 		let opacityValue = 0;
 
-		if (this.state.gameStarted) {
+		if (gameStarted) {
 			instructionsClass += " green-background";
 			opacityValue = 0.5;
 		}
@@ -320,10 +313,10 @@ class App extends React.Component {
 			<div className="app">
 				<Welcome visible={welcomeVisible} />
 
-				{ !this.state.inControl ? 
+				{ !inControl ? 
 					<div className="main-canvas">
 						<div className={instructionsClass}>{instructions}</div>
-						<div className="orientation">{"X: " + this.state.rotationDegrees.x + ", " + "Y: " + this.state.rotationDegrees.y + ", " + "Z: " + this.state.rotationDegrees.z}</div>
+						<div className="orientation">{`X: ${rotationDegrees.x},  Y: ${rotationDegrees.y}, Z: ${rotationDegrees.z}`}</div>
 						<React3 key={1} antialias={true} mainCamera="camera" width={size} height={size} alpha={true}>
 							<scene>
 								<perspectiveCamera name="camera" fov={50} aspect={1} near={0.1} far={1000} position={this.cameraPosition} rotation={this.cameraRotation}/>

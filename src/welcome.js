@@ -1,6 +1,6 @@
 import React from 'react';
 
-import qrCode from './images/qr-code.jpg';
+import qrCode from './images/frame.png';
 
 import './welcome.css';
 
