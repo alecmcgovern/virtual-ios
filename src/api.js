@@ -1,8 +1,8 @@
 import openSocket from 'socket.io-client';
 
 // const socket = openSocket('http://localhost:8000');
-const socket = openSocket('192.168.1.15:8000');
-// const socket = openSocket(window.location.hostname);
+// const socket = openSocket('192.168.1.15:8000');
+const socket = openSocket(window.location.hostname);
 
 
 // CLIENT CONNECTION CONTROLS
