@@ -9,7 +9,7 @@
     "react-scripts": "1.1.0",
     "react-three-renderer": "^3.2.3",
     "socket.io": "^2.0.4",
-    "three": "^0.86.0"
+    "three": "^0.137.0"
   },
   "scripts": {
     "start": "react-scripts start",
