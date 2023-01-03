@@ -6,7 +6,7 @@
     "express": "^4.16.2",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
-    "react-scripts": "1.1.0",
+    "react-scripts": "5.0.1",
     "react-three-renderer": "^3.2.3",
     "socket.io": "^2.0.4",
     "three": "^0.86.0"
